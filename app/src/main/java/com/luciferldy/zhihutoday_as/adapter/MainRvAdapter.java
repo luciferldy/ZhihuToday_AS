@@ -107,7 +107,6 @@ public class MainRvAdapter extends RecyclerView.Adapter<MainRvAdapter.BaseViewHo
      * @param data
      */
     public void appendMoreData(String date, NewsGson.StoriesBean data) {
-
     }
 
     /**
@@ -139,12 +138,10 @@ public class MainRvAdapter extends RecyclerView.Adapter<MainRvAdapter.BaseViewHo
         public void bindItem(DataWrapper data) {
             super.bindItem(data);
 
-            if (true)
-                return;
             List<View> views = new ArrayList<>();
             for (NewsGson.TopStoriesBean top : mTopList) {
                 Logger.i(LOG_TAG, "top stories = " + top.toString());
-                View page = View.inflate(pager.getContext(), R.layout.top_story_pager, pager);
+                View page = LayoutInflater.from(pager.getContext()).inflate(R.layout.top_story_pager, pager, false);
                 SimpleDraweeView image = (SimpleDraweeView) page.findViewById(R.id.image);
                 image.setImageURI(Uri.parse(top.getImage()));
                 TextView text = (TextView) page.findViewById(R.id.text);

@@ -5,6 +5,9 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.luciferldy.zhihutoday_as.utils.Logger;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -12,12 +15,15 @@ import java.util.List;
  */
 public class TopPagerAdapter extends PagerAdapter {
 
+    private static final String LOG_TAG = TopPagerAdapter.class.getSimpleName();
+
     private List<View> mList;
 
     public TopPagerAdapter(List<View> views) {
         super();
 
-        mList = views;
+        mList = new ArrayList<>();
+        mList.addAll(views);
     }
 
     @Override
@@ -32,7 +38,14 @@ public class TopPagerAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        ((ViewPager) container).addView(mList.get(position), 0);
+        Logger.i(LOG_TAG, "instantiateItem container=" + container.toString() + ", position=" + position);
+        container.addView(mList.get(position));
         return mList.get(position);
+    }
+
+    @Override
+    public void destroyItem(ViewGroup container, int position, Object object) {
+        Logger.i(LOG_TAG, "destroyItem container=" + container + ", position=" + position);
+        container.removeView(mList.get(position));
     }
 }
