@@ -8,7 +8,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 
 import com.luciferldy.zhihutoday_as.R;
 import com.luciferldy.zhihutoday_as.adapter.BillBoardViewAdapter;
@@ -28,11 +27,14 @@ public class BillBoardView extends FrameLayout {
     private static final int MESSAGE_SCROLL = 123;
     private int dotScrollInterval = 3; // unit s
     private int dotCount;
+    private float mAnimDistance;
 
     private ViewPager viewPager;
     private View dotCursor;
     private List<View> dotGroup;
     private Context mContext;
+    private FrameLayout.LayoutParams cursorParams;
+    private List<FrameLayout.LayoutParams> dotParams;
 
     private Handler handler = new Handler() {
         @Override
@@ -117,19 +119,26 @@ public class BillBoardView extends FrameLayout {
         });
         
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
+            /***
+             * 当 0 向 1 的位置滑动时， position 为 0 ，当 1 向 0 的位置滑动时， position 为 0
+             * @param position
+             * @param positionOffset
+             * @param positionOffsetPixels
+             */
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 Logger.i(LOG_TAG, "onPageScrolled position=" + position + ", positionOffset=" + positionOffset + ", positionOffsetPixels=" + positionOffsetPixels);
+                if (dotParams != null && position < dotParams.size()) {
+                    cursorParams.leftMargin = (int) (dotParams.get(position).leftMargin + mAnimDistance * positionOffset);
+                    dotCursor.setLayoutParams(cursorParams);
+                }
             }
 
             @Override
             public void onPageSelected(int position) {
-                if (position <= dotCount) {
-                    View view = dotGroup.get(position);
-                    FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) view.getLayoutParams();
-                    FrameLayout.LayoutParams cursorParams = (FrameLayout.LayoutParams) dotCursor.getLayoutParams();
-                    cursorParams.leftMargin = params.leftMargin;
-                    cursorParams.topMargin = params.topMargin;
+                if (dotParams != null && position < dotParams.size()) {
+                    cursorParams.leftMargin = dotParams.get(position).leftMargin;
                     dotCursor.setLayoutParams(cursorParams);
                 }
             }
@@ -148,7 +157,7 @@ public class BillBoardView extends FrameLayout {
         int parentHeight = this.getMeasuredHeight();
 
         // set the bottom margin of dot cursor
-        FrameLayout.LayoutParams cursorParams = (FrameLayout.LayoutParams) dotCursor.getLayoutParams();
+        cursorParams = (FrameLayout.LayoutParams) dotCursor.getLayoutParams();
         cursorParams.bottomMargin = CommonUtils.dip2px(getContext(), 10);
         dotCursor.setLayoutParams(cursorParams);
 
@@ -156,6 +165,9 @@ public class BillBoardView extends FrameLayout {
         int width = cursorParams.width;
         int height = cursorParams.height;
         int distance = CommonUtils.dip2px(getContext(), 3);
+        mAnimDistance = width + distance; // anim distance
+
+        dotParams = new ArrayList<>();
         for (int i = 0; i < dotGroup.size(); i++) {
             View dot = dotGroup.get(i);
             FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) dot.getLayoutParams();
@@ -164,6 +176,7 @@ public class BillBoardView extends FrameLayout {
             params.height = height;
             params.width = width;
             dot.setLayoutParams(params);
+            dotParams.add(params);
             if (i == 0) {
                 cursorParams.leftMargin = params.leftMargin;
                 cursorParams.topMargin = params.topMargin;
