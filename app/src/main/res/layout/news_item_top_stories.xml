@@ -1,11 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="225dip">
+    android:layout_height="match_parent">
     
     <android.support.v4.view.ViewPager
         android:id="@+id/pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-</FrameLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="100dip"
+        android:layout_gravity="bottom"
+        android:background="@drawable/bottom_layout_selector" />
+
+    <View
+        android:id="@+id/dot_cursor"
+        android:layout_width="7dip"
+        android:layout_height="7dip"
+        android:background="@drawable/dot_selected"
+        android:layout_gravity="bottom" />
+
+</merge>

@@ -13,11 +13,6 @@
         fresco:placeholderImage="@drawable/top_news_item_image"
         fresco:placeholderImageScaleType="centerCrop"/>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#5F000000" />
-
     <TextView
         android:id="@+id/text"
         android:layout_width="wrap_content"

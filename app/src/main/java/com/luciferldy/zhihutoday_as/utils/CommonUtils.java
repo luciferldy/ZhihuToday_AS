@@ -10,13 +10,14 @@ import java.lang.reflect.Field;
 public class CommonUtils {
 
     private static int statusBarHeight = 0;
+    private static float destiny = 0;
 
     /**
-     * get the statusbar height
+     * get the StatusBar height
      * @param context
      * @return
      */
-    public static int getStatusbarHeight(Context context) {
+    public static int getStatusBarHeight(Context context) {
         if (statusBarHeight == 0) {
             try {
                 Class<?> c = Class.forName("com.android.internal.R$dimen");
@@ -29,5 +30,18 @@ public class CommonUtils {
             }
         }
         return statusBarHeight;
+    }
+
+    /**
+     * dip to px
+     * @param context
+     * @param dipValue
+     * @return
+     */
+    public static int dip2px(Context context, float dipValue) {
+        if (destiny == 0) {
+            destiny = context.getResources().getDisplayMetrics().density;
+        }
+        return (int) (dipValue * destiny + 0.5f);
     }
 }

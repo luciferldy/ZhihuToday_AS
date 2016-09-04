@@ -3,6 +3,7 @@ package com.luciferldy.zhihutoday_as.adapter;
 import android.net.Uri;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,8 @@ import android.widget.TextView;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.luciferldy.zhihutoday_as.R;
 import com.luciferldy.zhihutoday_as.model.NewsGson;
+import com.luciferldy.zhihutoday_as.ui.view.BillBoardView;
+import com.luciferldy.zhihutoday_as.utils.CommonUtils;
 import com.luciferldy.zhihutoday_as.utils.Logger;
 
 import java.util.ArrayList;
@@ -24,9 +27,9 @@ public class MainRvAdapter extends RecyclerView.Adapter<MainRvAdapter.BaseViewHo
 
     private static final String LOG_TAG = MainRvAdapter.class.getSimpleName();
 
-
     private List<DataWrapper> mList;
     private static List<NewsGson.TopStoriesBean> mTopList;
+    private ClickItem listener;
 
     public MainRvAdapter() {
         mList = new ArrayList<>();
@@ -35,11 +38,13 @@ public class MainRvAdapter extends RecyclerView.Adapter<MainRvAdapter.BaseViewHo
 
     @Override
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Logger.i(LOG_TAG, "onCreateViewHolder");
         BaseViewHolder viewHolder;
         if (viewType == ViewType.ITEM_TOP_STORIES.ordinal()) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.news_item_top_stories, parent, false);
-            viewHolder = new TopStoriesViewHolder(view);
+//            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.news_item_top_stories, parent, false);
+//            viewHolder = new TopStoriesViewHolder(view);
+            BillBoardView billboard = new BillBoardView(parent.getContext());
+            parent.addView(billboard);
+            viewHolder = new TopStoriesViewHolder(billboard);
         } else if (viewType == ViewType.ITEM_TITLE.ordinal()) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.news_item_title, parent, false);
             viewHolder = new TitleViewHolder(view);
@@ -109,6 +114,10 @@ public class MainRvAdapter extends RecyclerView.Adapter<MainRvAdapter.BaseViewHo
     public void appendMoreData(String date, NewsGson.StoriesBean data) {
     }
 
+    public void setClickItem(ClickItem listener) {
+        this.listener = listener;
+    }
+
     /**
      * RecycleView 的基础 ViewHolder
      */
@@ -126,12 +135,17 @@ public class MainRvAdapter extends RecyclerView.Adapter<MainRvAdapter.BaseViewHo
      */
     static class TopStoriesViewHolder extends BaseViewHolder {
 
-        private ViewPager pager;
+        private View parent;
 
         public TopStoriesViewHolder(View itemView) {
             super(itemView);
-
-            pager = (ViewPager) itemView.findViewById(R.id.pager);
+            Logger.i(LOG_TAG, "TopStoriesViewHolder constructor called.");
+            parent = itemView;
+            // set the width and height
+            RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) parent.getLayoutParams();
+            params.height = CommonUtils.dip2px(parent.getContext(), 225);
+            params.width = ViewGroup.LayoutParams.MATCH_PARENT;
+            parent.setLayoutParams(params);
         }
 
         @Override
@@ -141,7 +155,7 @@ public class MainRvAdapter extends RecyclerView.Adapter<MainRvAdapter.BaseViewHo
             List<View> views = new ArrayList<>();
             for (NewsGson.TopStoriesBean top : mTopList) {
                 Logger.i(LOG_TAG, "top stories = " + top.toString());
-                View page = LayoutInflater.from(pager.getContext()).inflate(R.layout.top_story_pager, pager, false);
+                View page = LayoutInflater.from(parent.getContext()).inflate(R.layout.top_story_pager, null);
                 SimpleDraweeView image = (SimpleDraweeView) page.findViewById(R.id.image);
                 image.setImageURI(Uri.parse(top.getImage()));
                 TextView text = (TextView) page.findViewById(R.id.text);
@@ -149,9 +163,12 @@ public class MainRvAdapter extends RecyclerView.Adapter<MainRvAdapter.BaseViewHo
                 views.add(page);
             }
 
-            TopPagerAdapter adapter = new TopPagerAdapter(views);
-            pager.setAdapter(adapter);
-            pager.setCurrentItem(0);
+            if (parent instanceof BillBoardView) {
+                ((BillBoardView) parent).removeAllViewsInLayout();
+                ((BillBoardView) parent).start(views, 3, 1400);
+            } else {
+                Logger.i(LOG_TAG, "parent is not instance of BillBoardView.");
+            }
         }
     }
 
@@ -165,7 +182,7 @@ public class MainRvAdapter extends RecyclerView.Adapter<MainRvAdapter.BaseViewHo
 
         public StoriesViewHolder(View itemView) {
             super(itemView);
-
+            Logger.i(LOG_TAG, "StoriesViewHolder constructor called.");
             image = (SimpleDraweeView) itemView.findViewById(R.id.image);
             text = (TextView) itemView.findViewById(R.id.title);
         }
@@ -173,7 +190,7 @@ public class MainRvAdapter extends RecyclerView.Adapter<MainRvAdapter.BaseViewHo
         @Override
         public void bindItem(DataWrapper data) {
             super.bindItem(data);
-
+            Logger.i(LOG_TAG, "StoriesViewHolder bindItem called.");
             if (data.images.size() > 0) {
                 image.setImageURI(Uri.parse(data.images.get(0)));
             }
@@ -190,12 +207,14 @@ public class MainRvAdapter extends RecyclerView.Adapter<MainRvAdapter.BaseViewHo
 
         public TitleViewHolder(View itemView) {
             super(itemView);
+            Logger.i(LOG_TAG, "TitleViewHolder constructor called.");
             text = (TextView) itemView.findViewById(R.id.title);
         }
 
         @Override
         public void bindItem(DataWrapper data) {
             super.bindItem(data);
+            Logger.i(LOG_TAG, "TitleViewHolder bindItem called.");
             text.setText(data.title);
         }
     }
@@ -219,5 +238,9 @@ public class MainRvAdapter extends RecyclerView.Adapter<MainRvAdapter.BaseViewHo
         String gaPrefix;
         String title;
         List<String> images;
+    }
+
+    public interface ClickItem {
+        void onClick(String url);
     }
 }
