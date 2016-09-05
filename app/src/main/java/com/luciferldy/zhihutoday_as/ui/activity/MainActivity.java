@@ -22,13 +22,14 @@ import com.luciferldy.zhihutoday_as.model.NewsGson;
 import com.luciferldy.zhihutoday_as.presenter.MainPresenter;
 import com.luciferldy.zhihutoday_as.ui.fragment.BaseFragment;
 import com.luciferldy.zhihutoday_as.ui.fragment.StoryContentFragment;
+import com.luciferldy.zhihutoday_as.ui.view.BaseSwipeRefreshView;
 import com.luciferldy.zhihutoday_as.utils.CommonUtils;
 import com.luciferldy.zhihutoday_as.utils.FragmentUtils;
 import com.luciferldy.zhihutoday_as.utils.Logger;
 
 import java.util.List;
 
-public class MainActivity extends BaseActivity{
+public class MainActivity extends BaseActivity implements BaseSwipeRefreshView{
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
@@ -51,7 +52,17 @@ public class MainActivity extends BaseActivity{
         }
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
-        mSwipeRefreshLayout.setEnabled(false);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Logger.i(LOG_TAG, "onRefresh");
+                if (prepareRefresh()) {
+                    onRefreshStart();
+                } else {
+                    stopRefresh();
+                }
+            }
+        });
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             View view = findViewById(R.id.virtual_status_bar);
@@ -115,13 +126,36 @@ public class MainActivity extends BaseActivity{
     }
 
     public void fillData(String date, NewsGson data) {
-        Logger.i(LOG_TAG, "fillData");
+        Logger.i(LOG_TAG, "fillData data=" + date);
         mRvAdapter.updateData(date, data);
     }
 
     public void appendMore(String date, List<NewsGson.StoriesBean> data) {
         Logger.i(LOG_TAG, "appendMore date=" + date);
+        mRvAdapter.appendMoreData(date, data);
     }
 
+    @Override
+    public void startRefresh() {
+        if (mSwipeRefreshLayout != null) {
+            mSwipeRefreshLayout.setRefreshing(true);
+        }
+    }
 
+    @Override
+    public void stopRefresh() {
+        if (mSwipeRefreshLayout != null) {
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
+    }
+
+    @Override
+    public boolean prepareRefresh() {
+        return !mPresenter.isLoading();
+    }
+
+    @Override
+    public void onRefreshStart() {
+        mPresenter.getLatestNews();
+    }
 }

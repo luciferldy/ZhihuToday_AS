@@ -29,7 +29,7 @@ public class MainRvAdapter extends RecyclerView.Adapter<MainRvAdapter.BaseViewHo
 
     private List<DataWrapper> mList;
     private static List<NewsGson.TopStoriesBean> mTopList;
-    private ClickItem listener;
+    private static ClickItem listener;
 
     public MainRvAdapter() {
         mList = new ArrayList<>();
@@ -68,6 +68,11 @@ public class MainRvAdapter extends RecyclerView.Adapter<MainRvAdapter.BaseViewHo
     @Override
     public int getItemViewType(int position) {
         return mList.get(position).viewType.ordinal();
+    }
+
+    @Override
+    public void onClick(View v) {
+
     }
 
     /**
@@ -111,7 +116,27 @@ public class MainRvAdapter extends RecyclerView.Adapter<MainRvAdapter.BaseViewHo
      * @param date
      * @param data
      */
-    public void appendMoreData(String date, NewsGson.StoriesBean data) {
+    public void appendMoreData(String date, List<NewsGson.StoriesBean> data) {
+        // title
+        DataWrapper titleData = new DataWrapper();
+        titleData.viewType = ViewType.ITEM_TITLE;
+        titleData.title = date;
+        mList.add(titleData);
+
+        // normal stories
+        DataWrapper storyData;
+        for (NewsGson.StoriesBean story : data) {
+            storyData = new DataWrapper();
+            storyData.viewType = ViewType.ITEM_STORIES;
+            storyData.id = story.getId();
+            storyData.type = story.getType();
+            storyData.title = story.getTitle();
+            storyData.gaPrefix = story.getGa_prefix();
+            storyData.images = story.getImages();
+            mList.add(storyData);
+        }
+
+        notifyDataSetChanged();
     }
 
     public void setClickItem(ClickItem listener) {
@@ -123,8 +148,11 @@ public class MainRvAdapter extends RecyclerView.Adapter<MainRvAdapter.BaseViewHo
      */
     abstract static class BaseViewHolder extends RecyclerView.ViewHolder{
 
+        protected View parent;
+
         public BaseViewHolder(View itemView) {
             super(itemView);
+            this.parent = itemView;
         }
 
         public void bindItem(DataWrapper data){}
@@ -188,13 +216,14 @@ public class MainRvAdapter extends RecyclerView.Adapter<MainRvAdapter.BaseViewHo
         }
 
         @Override
-        public void bindItem(DataWrapper data) {
+        public void bindItem(final DataWrapper data) {
             super.bindItem(data);
             Logger.i(LOG_TAG, "StoriesViewHolder bindItem called.");
             if (data.images.size() > 0) {
                 image.setImageURI(Uri.parse(data.images.get(0)));
             }
             text.setText(data.title);
+            parent.setOnClickListener(MainRvAdapter.this);
         }
     }
 

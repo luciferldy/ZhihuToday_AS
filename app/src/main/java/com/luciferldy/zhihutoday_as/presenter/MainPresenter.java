@@ -30,6 +30,7 @@ public class MainPresenter extends BasePresenter<MainActivity> {
     private Subscription mLatestSub;
     private Subscription mEarlierSub;
 
+    private boolean isLoading = false;
 
     public MainPresenter(Activity activity, MainActivity view) {
         super(activity, view);
@@ -38,8 +39,9 @@ public class MainPresenter extends BasePresenter<MainActivity> {
     /**
      * 获得最新的新闻消息
      */
-    public void getLatestNews() {
+    public synchronized void getLatestNews() {
 
+        isLoading = true;
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(URL_LATEST_NEWS)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -52,11 +54,13 @@ public class MainPresenter extends BasePresenter<MainActivity> {
                 .subscribe(new Observer<NewsGson>() {
                     @Override
                     public void onCompleted() {
-                        Logger.i(LOG_TAG, "getLatestNews onCompleted");
+                        isLoading = false;
+                        Logger.i(LOG_TAG, "getLatestNews onCompleted.");
                     }
 
                     @Override
                     public void onError(Throwable e) {
+                        isLoading = false;
                         e.printStackTrace();
                         Logger.i(LOG_TAG, "getLatestNews onError, e=" + e.getMessage());
                     }
@@ -75,8 +79,8 @@ public class MainPresenter extends BasePresenter<MainActivity> {
      * 获得更早期的新闻内容
      * 应该由 MainPresenter 维护时间线
      */
-    public void getEarlierNews() {
-
+    public synchronized void getEarlierNews() {
+        isLoading = true;
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(URL_EARLIER_NEWS)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -89,11 +93,14 @@ public class MainPresenter extends BasePresenter<MainActivity> {
                 .subscribe(new Observer<List<NewsGson.StoriesBean>>() {
                     @Override
                     public void onCompleted() {
+                        isLoading = false;
+                        Logger.i(LOG_TAG, "getEarlierNews onCompleted.");
                     }
 
                     @Override
                     public void onError(Throwable e) {
-
+                        isLoading = false;
+                        e.printStackTrace();
                     }
 
                     @Override
@@ -106,6 +113,14 @@ public class MainPresenter extends BasePresenter<MainActivity> {
                 });
 
 
+    }
+
+    /**
+     * 是否正在加载 Story
+     * @return
+     */
+    public boolean isLoading() {
+        return isLoading;
     }
 
     /**
