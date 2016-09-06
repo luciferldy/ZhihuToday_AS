@@ -184,6 +184,5 @@ public class BillBoardView extends FrameLayout {
             }
         }
     }
-
 }
 

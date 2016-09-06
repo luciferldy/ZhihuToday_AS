@@ -26,6 +26,7 @@ public class MainPresenter extends BasePresenter<MainActivity> {
 
     public static final String URL_LATEST_NEWS = "http://news-at.zhihu.com/api/4/";
     public static final String URL_EARLIER_NEWS = "http://news.at.zhihu.com/api/4/";
+    public static final String URL_DAILY_STORY = "http://daily.zhihu.com/story/";
 
     private Subscription mLatestSub;
     private Subscription mEarlierSub;

@@ -73,7 +73,21 @@ public class MainActivity extends BaseActivity implements BaseSwipeRefreshView{
         }
 
         mRv = (RecyclerView) findViewById(R.id.main_rv);
+        final LinearLayoutManager layoutManager = new LinearLayoutManager(getBaseContext());
         mRv.setLayoutManager(new LinearLayoutManager(getBaseContext()));
+        mRv.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    boolean isBottom = layoutManager.findLastCompletelyVisibleItemPosition() > mRvAdapter.getItemCount() - 2;
+                    if (prepareRefresh() && isBottom) {
+                        Logger.i(LOG_TAG, "slide to the bottom, ready to load more data.");
+                        mPresenter.getEarlierNews();
+                    }
+                }
+            }
+        });
         mRvAdapter = new MainRvAdapter();
         mRvAdapter.setClickItem(new MainRvAdapter.ClickItem() {
             @Override

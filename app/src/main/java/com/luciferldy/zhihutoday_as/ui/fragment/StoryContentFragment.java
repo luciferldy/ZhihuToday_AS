@@ -1,8 +1,10 @@
 package com.luciferldy.zhihutoday_as.ui.fragment;
 
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +15,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.luciferldy.zhihutoday_as.R;
+import com.luciferldy.zhihutoday_as.utils.CommonUtils;
 import com.luciferldy.zhihutoday_as.utils.FragmentUtils;
 import com.luciferldy.zhihutoday_as.utils.Logger;
 
@@ -31,6 +34,15 @@ public class StoryContentFragment extends Fragment implements BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.news_content, container, false);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            View view = root.findViewById(R.id.virtual_status_bar);
+            AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) view.getLayoutParams();
+            params.height = CommonUtils.getStatusBarHeight(getContext());
+            view.setLayoutParams(params);
+            view.setVisibility(View.VISIBLE);
+        }
+
         mWebView = (WebView) root.findViewById(R.id.web_view);
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.setWebViewClient(new CustomWebViewClient());

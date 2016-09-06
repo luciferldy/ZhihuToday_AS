@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.luciferldy.zhihutoday_as.R;
 import com.luciferldy.zhihutoday_as.model.NewsGson;
+import com.luciferldy.zhihutoday_as.presenter.MainPresenter;
 import com.luciferldy.zhihutoday_as.ui.view.BillBoardView;
 import com.luciferldy.zhihutoday_as.utils.CommonUtils;
 import com.luciferldy.zhihutoday_as.utils.Logger;
@@ -68,11 +69,6 @@ public class MainRvAdapter extends RecyclerView.Adapter<MainRvAdapter.BaseViewHo
     @Override
     public int getItemViewType(int position) {
         return mList.get(position).viewType.ordinal();
-    }
-
-    @Override
-    public void onClick(View v) {
-
     }
 
     /**
@@ -177,7 +173,7 @@ public class MainRvAdapter extends RecyclerView.Adapter<MainRvAdapter.BaseViewHo
         }
 
         @Override
-        public void bindItem(DataWrapper data) {
+        public void bindItem(final DataWrapper data) {
             super.bindItem(data);
 
             List<View> views = new ArrayList<>();
@@ -189,6 +185,12 @@ public class MainRvAdapter extends RecyclerView.Adapter<MainRvAdapter.BaseViewHo
                 TextView text = (TextView) page.findViewById(R.id.text);
                 text.setText(top.getTitle());
                 views.add(page);
+                page.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        listener.onClick(MainPresenter.URL_DAILY_STORY + data.id);
+                    }
+                });
             }
 
             if (parent instanceof BillBoardView) {
@@ -223,7 +225,12 @@ public class MainRvAdapter extends RecyclerView.Adapter<MainRvAdapter.BaseViewHo
                 image.setImageURI(Uri.parse(data.images.get(0)));
             }
             text.setText(data.title);
-            parent.setOnClickListener(MainRvAdapter.this);
+            parent.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onClick(MainPresenter.URL_DAILY_STORY + data.id);
+                }
+            });
         }
     }
 
