@@ -1,20 +1,28 @@
 package com.luciferldy.zhihutoday_as.ui.fragment;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
 
 import com.luciferldy.zhihutoday_as.R;
+import com.luciferldy.zhihutoday_as.ui.view.BaseSwipeRefreshView;
 import com.luciferldy.zhihutoday_as.utils.CommonUtils;
 import com.luciferldy.zhihutoday_as.utils.FragmentUtils;
 import com.luciferldy.zhihutoday_as.utils.Logger;
@@ -22,12 +30,15 @@ import com.luciferldy.zhihutoday_as.utils.Logger;
 /**
  * Created by Lucifer on 2016/9/4.
  */
-public class StoryContentFragment extends Fragment implements BaseFragment {
+public class StoryContentFragment extends Fragment implements BaseFragment, BaseSwipeRefreshView {
 
     public static final String BUNDLE_URL = "story_url";
 
     private static final String LOG_TAG = StoryContentFragment.class.getSimpleName();
+
     private WebView mWebView;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+
     private String mUrl;
 
     @Nullable
@@ -42,6 +53,36 @@ public class StoryContentFragment extends Fragment implements BaseFragment {
             view.setLayoutParams(params);
             view.setVisibility(View.VISIBLE);
         }
+
+        Toolbar toolbar = (Toolbar) root.findViewById(R.id.toolbar);
+        toolbar.inflateMenu(R.menu.menu_web_content);
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.open_in_browser:
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(mUrl));
+                        startActivity(intent);
+                        break;
+                    case R.id.share:
+                        CommonUtils.copyText(getContext(), StoryContentFragment.BUNDLE_URL, mUrl);
+                        Toast.makeText(getContext(), "已经复制到剪贴板", Toast.LENGTH_SHORT).show();
+                        break;
+                    default:
+                        Logger.i(LOG_TAG, "MenuItem click default value.");
+                }
+                return true;
+            }
+        });
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+
+        mSwipeRefreshLayout = (SwipeRefreshLayout) root.findViewById(R.id.swipe_refresh_layout);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                onRefreshStart();
+            }
+        });
 
         mWebView = (WebView) root.findViewById(R.id.web_view);
         mWebView.getSettings().setJavaScriptEnabled(true);
@@ -86,16 +127,39 @@ public class StoryContentFragment extends Fragment implements BaseFragment {
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             super.onPageStarted(view, url, favicon);
+            startRefresh();
         }
 
         @Override
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
+            stopRefresh();
         }
 
         @Override
         public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
             super.onReceivedError(view, request, error);
+            stopRefresh();
         }
+    }
+
+    @Override
+    public boolean prepareRefresh() {
+        return false;
+    }
+
+    @Override
+    public void onRefreshStart() {
+        mWebView.reload();
+    }
+
+    @Override
+    public void startRefresh() {
+        mSwipeRefreshLayout.setRefreshing(true);
+    }
+
+    @Override
+    public void stopRefresh() {
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 }

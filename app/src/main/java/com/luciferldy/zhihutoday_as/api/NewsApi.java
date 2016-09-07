@@ -2,8 +2,6 @@ package com.luciferldy.zhihutoday_as.api;
 
 import com.luciferldy.zhihutoday_as.model.NewsGson;
 
-import java.util.List;
-
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import rx.Observable;
@@ -14,12 +12,13 @@ import rx.Observable;
 public interface NewsApi {
 
     /**
-     * 获得较早时间新闻
+     * 获得较早时间新闻，前面使用 Observable<List<NewsGson.StoriesBean> 返回出现解析错误
+     * 只能使用 NewsGson
      * @param date
      * @return
      */
-    @GET("news/latest/{date}")
-    Observable<List<NewsGson.StoriesBean>> getEarlierNews(@Path("date") String date);
+    @GET("news/before/{date}")
+    Observable<NewsGson> getEarlierNews(@Path("date") String date);
 
     /**
      * 获得最新的新闻

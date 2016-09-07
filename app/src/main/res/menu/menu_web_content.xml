@@ -1,0 +1,14 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/open_in_browser"
+        android:orderInCategory="100"
+        android:title="在浏览器打开"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/share"
+        android:orderInCategory="100"
+        android:title="分享"
+        app:showAsAction="never" />
+</menu>

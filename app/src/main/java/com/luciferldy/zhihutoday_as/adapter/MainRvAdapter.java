@@ -18,6 +18,8 @@ import com.luciferldy.zhihutoday_as.utils.CommonUtils;
 import com.luciferldy.zhihutoday_as.utils.Logger;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 
@@ -31,10 +33,12 @@ public class MainRvAdapter extends RecyclerView.Adapter<MainRvAdapter.BaseViewHo
     private List<DataWrapper> mList;
     private static List<NewsGson.TopStoriesBean> mTopList;
     private static ClickItem listener;
+    private Calendar calendar;
 
     public MainRvAdapter() {
         mList = new ArrayList<>();
         mTopList = new ArrayList<>();
+        calendar = Calendar.getInstance();
     }
 
     @Override

@@ -11,7 +11,7 @@
         android:layout_marginLeft="16dip"
         android:layout_marginBottom="10dip"
         android:layout_gravity="bottom"
-        android:textSize="12dip"
+        android:textSize="13dip"
         android:textColor="@color/md_grey_700"
         android:hint="今日热闻"/>
 

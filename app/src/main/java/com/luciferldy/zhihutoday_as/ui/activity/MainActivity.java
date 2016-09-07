@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -41,7 +42,7 @@ public class MainActivity extends BaseActivity implements BaseSwipeRefreshView{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.app_name);
@@ -74,13 +75,15 @@ public class MainActivity extends BaseActivity implements BaseSwipeRefreshView{
 
         mRv = (RecyclerView) findViewById(R.id.main_rv);
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getBaseContext());
-        mRv.setLayoutManager(new LinearLayoutManager(getBaseContext()));
+        mRv.setLayoutManager(layoutManager);
         mRv.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
+//                Logger.i(LOG_TAG, "onScrollStateChanged. LayoutManager.findLastCompletelyVisibleItemPosition=" + layoutManager.findLastCompletelyVisibleItemPosition()
+//                        + ", Item count=" + mRvAdapter.getItemCount());
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    boolean isBottom = layoutManager.findLastCompletelyVisibleItemPosition() > mRvAdapter.getItemCount() - 2;
+                    boolean isBottom = layoutManager.findLastCompletelyVisibleItemPosition() > mRvAdapter.getItemCount() - 3;
                     if (prepareRefresh() && isBottom) {
                         Logger.i(LOG_TAG, "slide to the bottom, ready to load more data.");
                         mPresenter.getEarlierNews();
@@ -109,7 +112,10 @@ public class MainActivity extends BaseActivity implements BaseSwipeRefreshView{
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        mPresenter.getLatestNews();
+        if (prepareRefresh()) {
+            startRefresh();
+            mPresenter.getLatestNews();
+        }
     }
 
     @Override
@@ -142,6 +148,7 @@ public class MainActivity extends BaseActivity implements BaseSwipeRefreshView{
     public void fillData(String date, NewsGson data) {
         Logger.i(LOG_TAG, "fillData data=" + date);
         mRvAdapter.updateData(date, data);
+        stopRefresh();
     }
 
     public void appendMore(String date, List<NewsGson.StoriesBean> data) {

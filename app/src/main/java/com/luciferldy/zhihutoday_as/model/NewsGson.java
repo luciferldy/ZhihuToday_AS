@@ -60,6 +60,7 @@ public class NewsGson {
     public static class StoriesBean {
         private int type;
         private int id;
+        private boolean multipic;
         private String ga_prefix;
         private String title;
         private List<String> images;
@@ -78,6 +79,14 @@ public class NewsGson {
 
         public void setId(int id) {
             this.id = id;
+        }
+
+        public void setMultipic(boolean multipic) {
+            this.multipic = multipic;
+        }
+
+        public boolean getMultipic() {
+            return this.multipic;
         }
 
         public String getGa_prefix() {

@@ -1,5 +1,7 @@
 package com.luciferldy.zhihutoday_as.utils;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 
 import java.lang.reflect.Field;
@@ -43,5 +45,17 @@ public class CommonUtils {
             destiny = context.getResources().getDisplayMetrics().density;
         }
         return (int) (dipValue * destiny + 0.5f);
+    }
+
+    /**
+     * 复制内容到粘贴板
+     * @param context
+     * @param key
+     * @param value
+     */
+    public static void copyText(Context context, String key, String value) {
+        ClipboardManager cbm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clipData = ClipData.newPlainText(key, value);
+        cbm.setPrimaryClip(clipData);
     }
 }
