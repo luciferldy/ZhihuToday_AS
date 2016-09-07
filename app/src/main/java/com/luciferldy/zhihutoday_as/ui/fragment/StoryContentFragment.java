@@ -26,14 +26,15 @@ import com.luciferldy.zhihutoday_as.ui.view.BaseSwipeRefreshView;
 import com.luciferldy.zhihutoday_as.utils.CommonUtils;
 import com.luciferldy.zhihutoday_as.utils.FragmentUtils;
 import com.luciferldy.zhihutoday_as.utils.Logger;
+import com.luciferldy.zhihutoday_as.utils.ShareUtils;
 
 /**
  * Created by Lucifer on 2016/9/4.
+ * 故事内容页
  */
 public class StoryContentFragment extends Fragment implements BaseFragment, BaseSwipeRefreshView {
 
     public static final String BUNDLE_URL = "story_url";
-
     private static final String LOG_TAG = StoryContentFragment.class.getSimpleName();
 
     private WebView mWebView;
@@ -65,6 +66,9 @@ public class StoryContentFragment extends Fragment implements BaseFragment, Base
                         startActivity(intent);
                         break;
                     case R.id.share:
+                        ShareUtils.shareText(getContext(), mUrl);
+                        break;
+                    case R.id.copy_url:
                         CommonUtils.copyText(getContext(), StoryContentFragment.BUNDLE_URL, mUrl);
                         Toast.makeText(getContext(), "已经复制到剪贴板", Toast.LENGTH_SHORT).show();
                         break;
@@ -75,6 +79,13 @@ public class StoryContentFragment extends Fragment implements BaseFragment, Base
             }
         });
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Logger.i(LOG_TAG, "Navigation onClick.");
+                onBackPressed();
+            }
+        });
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) root.findViewById(R.id.swipe_refresh_layout);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
