@@ -12,7 +12,9 @@ import java.util.List;
 
 /**
  * Created by Lucifer on 2016/8/31.
+ * 记载热门故事的 Adapter
  */
+@Deprecated
 public class TopPagerAdapter extends PagerAdapter {
 
     private static final String LOG_TAG = TopPagerAdapter.class.getSimpleName();

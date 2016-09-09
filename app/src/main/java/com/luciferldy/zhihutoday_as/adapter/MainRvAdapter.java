@@ -1,12 +1,12 @@
 package com.luciferldy.zhihutoday_as.adapter;
 
 import android.net.Uri;
-import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -19,7 +19,6 @@ import com.luciferldy.zhihutoday_as.utils.Logger;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 
@@ -33,12 +32,10 @@ public class MainRvAdapter extends RecyclerView.Adapter<MainRvAdapter.BaseViewHo
     private List<DataWrapper> mList;
     private static List<NewsGson.TopStoriesBean> mTopList;
     private static ClickItem listener;
-    private Calendar calendar;
 
     public MainRvAdapter() {
         mList = new ArrayList<>();
         mTopList = new ArrayList<>();
-        calendar = Calendar.getInstance();
     }
 
     @Override
@@ -63,6 +60,9 @@ public class MainRvAdapter extends RecyclerView.Adapter<MainRvAdapter.BaseViewHo
     @Override
     public void onBindViewHolder(BaseViewHolder holder, int position) {
         holder.bindItem(mList.get(position));
+        if (holder instanceof StoriesViewHolder) {
+            showItemAnim(holder.parent, position);
+        }
     }
 
     @Override
@@ -143,12 +143,41 @@ public class MainRvAdapter extends RecyclerView.Adapter<MainRvAdapter.BaseViewHo
         this.listener = listener;
     }
 
-    /**
-     * RecycleView 的基础 ViewHolder
-     */
-    abstract static class BaseViewHolder extends RecyclerView.ViewHolder{
+    private int mLastPosition = -1;
 
-        protected View parent;
+    private void showItemAnim(final View view, final int position) {
+        if (position > mLastPosition) {
+            view.setAlpha(0);
+            view.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Animation animation = AnimationUtils.loadAnimation(view.getContext(), R.anim.slide_from_right);
+                    animation.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
+                            view.setAlpha(1.0f);
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {
+
+                        }
+                    });
+                    view.startAnimation(animation);
+                }
+            }, position * 100);
+            mLastPosition = position;
+        }
+    }
+
+    abstract static class BaseViewHolder extends RecyclerView.ViewHolder {
+
+        View parent;
 
         public BaseViewHolder(View itemView) {
             super(itemView);
@@ -163,12 +192,9 @@ public class MainRvAdapter extends RecyclerView.Adapter<MainRvAdapter.BaseViewHo
      */
     static class TopStoriesViewHolder extends BaseViewHolder {
 
-        private View parent;
-
         public TopStoriesViewHolder(View itemView) {
             super(itemView);
             Logger.i(LOG_TAG, "TopStoriesViewHolder constructor called.");
-            parent = itemView;
             // set the width and height
             RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) parent.getLayoutParams();
             params.height = CommonUtils.dip2px(parent.getContext(), 225);
@@ -262,7 +288,7 @@ public class MainRvAdapter extends RecyclerView.Adapter<MainRvAdapter.BaseViewHo
     /**
      * 几种 item 的类型
      */
-    private enum ViewType {
+    enum ViewType {
         ITEM_TOP_STORIES,
         ITEM_TITLE,
         ITEM_STORIES
@@ -271,7 +297,7 @@ public class MainRvAdapter extends RecyclerView.Adapter<MainRvAdapter.BaseViewHo
     /**
      * 封装数据类
      */
-    private class DataWrapper {
+    class DataWrapper {
         ViewType viewType;
         int id;
         int type;

@@ -22,7 +22,15 @@
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
+    <FrameLayout
+        android:id="@+id/start_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/start_iv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
-
+    </FrameLayout>
 </android.support.design.widget.CoordinatorLayout>

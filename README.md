@@ -29,6 +29,7 @@
 
 * [DecentBanner](https://github.com/chengdazhi/DecentBanner) 参考了其中 indicator 的实现方式，应用到 dot 中。
 * [ZhihuDailyPurify](https://github.com/izzyleung/ZhihuDailyPurify/) 数据来源与 ZhihuDailyPurify 对知乎日报 API 的分析。
+* [EasyRecycleAdapterHelper](https://github.com/HotBitmapGG/EasyRecycleAdapterHelper) 加载 RecycleView item 时的动画效果。
 * More 还有很多优秀的 Retrofit ，RxJava 的文章。
 
 ### License

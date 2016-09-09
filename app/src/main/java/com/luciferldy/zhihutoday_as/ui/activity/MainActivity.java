@@ -15,8 +15,10 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.luciferldy.zhihutoday_as.R;
 import com.luciferldy.zhihutoday_as.adapter.MainRvAdapter;
 import com.luciferldy.zhihutoday_as.model.NewsGson;
@@ -51,6 +53,16 @@ public class MainActivity extends BaseActivity implements BaseSwipeRefreshView{
             Logger.i(LOG_TAG, "child at 0 is instance of TextView");
             ((AppCompatTextView) titleView).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
         }
+
+        SimpleDraweeView startIV = (SimpleDraweeView) findViewById(R.id.start_iv);
+        startIV.setImageResource(R.drawable.start);
+        final FrameLayout layout = (FrameLayout) findViewById(R.id.start_layout);
+        layout.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                layout.setVisibility(View.GONE);
+            }
+        }, 2000);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -113,7 +125,6 @@ public class MainActivity extends BaseActivity implements BaseSwipeRefreshView{
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         if (prepareRefresh()) {
-            startRefresh();
             mPresenter.getLatestNews();
         }
     }
