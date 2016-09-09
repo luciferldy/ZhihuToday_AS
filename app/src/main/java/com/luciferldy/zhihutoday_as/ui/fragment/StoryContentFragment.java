@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebResourceError;
@@ -46,6 +47,12 @@ public class StoryContentFragment extends Fragment implements BaseFragment, Base
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.news_content, container, false);
+        root.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                return true;
+            }
+        });
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             View view = root.findViewById(R.id.virtual_status_bar);
