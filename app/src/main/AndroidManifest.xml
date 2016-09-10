@@ -13,7 +13,7 @@
         android:theme="@style/AppTheme.NoActionBar">
 
         <activity android:name=".ui.activity.SplashActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar.BackgroundTranslucent">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
