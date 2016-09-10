@@ -170,7 +170,7 @@ public class MainRvAdapter extends RecyclerView.Adapter<MainRvAdapter.BaseViewHo
                     });
                     view.startAnimation(animation);
                 }
-            }, position * 100);
+            }, position);
             mLastPosition = position;
         }
     }

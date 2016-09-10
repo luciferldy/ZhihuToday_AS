@@ -54,16 +54,6 @@ public class MainActivity extends BaseActivity implements BaseSwipeRefreshView{
             ((AppCompatTextView) titleView).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
         }
 
-        SimpleDraweeView startIV = (SimpleDraweeView) findViewById(R.id.start_iv);
-        startIV.setImageResource(R.drawable.start);
-        final FrameLayout layout = (FrameLayout) findViewById(R.id.start_layout);
-        layout.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                layout.setVisibility(View.GONE);
-            }
-        }, 2000);
-
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
