@@ -1,20 +1,23 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppThemeDayNight" parent="Theme.AppCompat.DayNight.NoActionBar">
         <!-- Customize your theme here. -->
+        <!--   your app branding color for the app bar -->
         <item name="colorPrimary">@color/colorPrimary</item>
+        <!--   darker variant for the status bar and contextual app bars -->
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <!--   theme UI controls like checkboxes and text fields -->
         <item name="colorAccent">@color/colorAccent</item>
     </style>
     
-    <style name="AppTheme.NoActionBar">
+    <style name="AppThemeDayNight.NoActionBar">
         <item name="android:windowActionBar">false</item>
         <item name="android:windowNoTitle">true</item>
     </style>
 
     <!-- 将 windowBackground 设置为 @null 可以避免应用启动页面有白色过渡 -->
-    <style name="AppTheme.NoActionBar.BackgroundTranslucent">
+    <style name="AppThemeDayNight.NoActionBar.BackgroundTranslucent">
         <item name="android:windowBackground">@null</item>
     </style>
 

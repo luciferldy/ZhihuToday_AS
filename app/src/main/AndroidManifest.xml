@@ -10,10 +10,10 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme.NoActionBar">
+        android:theme="@style/AppThemeDayNight.NoActionBar">
 
         <activity android:name=".ui.activity.SplashActivity"
-            android:theme="@style/AppTheme.NoActionBar.BackgroundTranslucent">
+            android:theme="@style/AppThemeDayNight.NoActionBar.BackgroundTranslucent">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -21,7 +21,7 @@
         </activity>
 
         <activity android:name=".ui.activity.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppThemeDayNight.NoActionBar">
         </activity>
     </application>
 

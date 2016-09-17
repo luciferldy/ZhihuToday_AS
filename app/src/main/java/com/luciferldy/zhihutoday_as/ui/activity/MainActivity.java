@@ -1,5 +1,6 @@
 package com.luciferldy.zhihutoday_as.ui.activity;
 
+import android.content.res.Configuration;
 import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
@@ -7,18 +8,17 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.TypedValue;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.facebook.drawee.view.SimpleDraweeView;
 import com.luciferldy.zhihutoday_as.R;
 import com.luciferldy.zhihutoday_as.adapter.MainRvAdapter;
 import com.luciferldy.zhihutoday_as.model.NewsGson;
@@ -37,18 +37,50 @@ public class MainActivity extends BaseActivity implements BaseSwipeRefreshView{
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
     private RecyclerView mRv;
+    private Toolbar mToolbar;
+    private MenuItem mMode;
+    private View mVStatusBar;
     private MainRvAdapter mRvAdapter;
     private MainPresenter mPresenter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+
+    private int mDayNightMode = AppCompatDelegate.MODE_NIGHT_AUTO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(R.string.app_name);
-        View titleView = toolbar.getChildAt(0);
+        mVStatusBar = findViewById(R.id.virtual_status_bar);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar.inflateMenu(R.menu.menu_main);
+        mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.change_mode:
+                        Logger.i(LOG_TAG, "onMenuItemClick change mode.");
+                        if (item.getTitle().equals(getResources().getString(R.string.mode_night_yes))) {
+                            // AppCompatDelegate.setDefaultNightMode 的设置是对整个 APP 的 theme 有效
+                            // getDelegate.setLocalNightMode 的设置只是对于设置的地方有效
+                            item.setTitle(R.string.mode_night_no);
+                            getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                            recreate();
+                        } else {
+                            item.setTitle(R.string.mode_night_yes);
+                            getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                            recreate();
+                        }
+                        return true;
+                    default:
+                        Logger.i(LOG_TAG, "onMenuItemClick default.");
+                        return false;
+                }
+            }
+        });
+        mToolbar.setTitle(R.string.app_name);
+        mMode = mToolbar.getMenu().findItem(R.id.change_mode);
+        View titleView = mToolbar.getChildAt(0);
         if (titleView instanceof TextView) {
             Logger.i(LOG_TAG, "child at 0 is instance of TextView");
             ((AppCompatTextView) titleView).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
@@ -116,6 +148,27 @@ public class MainActivity extends BaseActivity implements BaseSwipeRefreshView{
         super.onPostCreate(savedInstanceState);
         if (prepareRefresh()) {
             mPresenter.getLatestNews();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        int uiMode = getResources().getConfiguration().uiMode;
+        int dayNightUiMode = uiMode & Configuration.UI_MODE_NIGHT_MASK;
+
+        if (dayNightUiMode == Configuration.UI_MODE_NIGHT_NO) {
+            mDayNightMode = AppCompatDelegate.MODE_NIGHT_NO;
+            mMode.setTitle(R.string.mode_night_yes);
+            mVStatusBar.setBackgroundResource(R.color.colorPrimaryDark);
+        } else if (dayNightUiMode == Configuration.UI_MODE_NIGHT_YES) {
+            mDayNightMode = AppCompatDelegate.MODE_NIGHT_YES;
+            mMode.setTitle(R.string.mode_night_no);
+            mVStatusBar.setBackgroundResource(R.color.colorPrimaryDarkNight);
+        } else {
+            Logger.i(LOG_TAG, "onResume mode is AppCompatDelegate.MODE_NIGHT_AUTO");
+            mDayNightMode = AppCompatDelegate.MODE_NIGHT_AUTO;
+            mMode.setTitle(R.string.mode_night_yes);
         }
     }
 

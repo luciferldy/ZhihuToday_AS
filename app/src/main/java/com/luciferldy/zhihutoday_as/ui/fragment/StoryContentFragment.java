@@ -1,6 +1,7 @@
 package com.luciferldy.zhihutoday_as.ui.fragment;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
@@ -9,8 +10,8 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -39,6 +40,7 @@ public class StoryContentFragment extends Fragment implements BaseFragment, Base
     private static final String LOG_TAG = StoryContentFragment.class.getSimpleName();
 
     private WebView mWebView;
+    private View mVStatusBar;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
     private String mUrl;
@@ -63,7 +65,7 @@ public class StoryContentFragment extends Fragment implements BaseFragment, Base
         }
 
         Toolbar toolbar = (Toolbar) root.findViewById(R.id.toolbar);
-        toolbar.inflateMenu(R.menu.menu_web_content);
+        toolbar.inflateMenu(R.menu.menu_news_content);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -94,6 +96,8 @@ public class StoryContentFragment extends Fragment implements BaseFragment, Base
             }
         });
 
+        mVStatusBar = root.findViewById(R.id.virtual_status_bar);
+
         mSwipeRefreshLayout = (SwipeRefreshLayout) root.findViewById(R.id.swipe_refresh_layout);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -120,7 +124,20 @@ public class StoryContentFragment extends Fragment implements BaseFragment, Base
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        int uiMode = getResources().getConfiguration().uiMode;
+        int dayNightUiMode = uiMode & Configuration.UI_MODE_NIGHT_MASK;
 
+        if (dayNightUiMode == Configuration.UI_MODE_NIGHT_NO) {
+            mVStatusBar.setBackgroundResource(R.color.colorPrimaryDark);
+        } else if (dayNightUiMode == Configuration.UI_MODE_NIGHT_YES) {
+            mVStatusBar.setBackgroundResource(R.color.colorPrimaryDarkNight);
+        } else {
+            Logger.i(LOG_TAG, "onResume mode is AppCompatDelegate.MODE_NIGHT_AUTO");
+        }
+    }
 
     @Override
     public void initPresenter() {

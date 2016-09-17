@@ -3,4 +3,6 @@
     <string name="open_in_browser">在浏览器中打开</string>
     <string name="share">分享</string>
     <string name="copy_url">复制链接</string>
+    <string name="mode_night_no">日间模式</string>
+    <string name="mode_night_yes">夜间模式</string>
 </resources>
