@@ -76,13 +76,14 @@ public class MainActivity extends BaseActivity implements BaseSwipeRefreshView{
                     case R.id.change_mode:
                         Logger.i(LOG_TAG, "onMenuItemClick change mode.");
                         if (item.getTitle().equals(getResources().getString(R.string.mode_night_yes))) {
-                            // AppCompatDelegate.setDefaultNightMode 的设置是对整个 APP 的 theme 有效
-                            // getDelegate.setLocalNightMode 的设置只是对于设置的地方有效
-                            item.setTitle(R.string.mode_night_no);
+                            /***
+                             * AppCompatDelegate.setDefaultNightMode 的设置是对整个 APP 的 theme 有效
+                             * getDelegate.setLocalNightMode 的设置只是对于设置的地方有效
+                             * getDelegate 设置的效果可以覆盖 AppCompatDelegate.setDefaultNightMode 效果
+                             */
                             getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
                             recreate();
                         } else {
-                            item.setTitle(R.string.mode_night_yes);
                             getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                             recreate();
                         }
