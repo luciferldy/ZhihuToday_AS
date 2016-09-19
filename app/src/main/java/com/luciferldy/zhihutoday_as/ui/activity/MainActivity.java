@@ -14,6 +14,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,6 +31,7 @@ import com.luciferldy.zhihutoday_as.utils.CommonUtils;
 import com.luciferldy.zhihutoday_as.utils.FragmentUtils;
 import com.luciferldy.zhihutoday_as.utils.Logger;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 public class MainActivity extends BaseActivity implements BaseSwipeRefreshView{
@@ -49,10 +51,23 @@ public class MainActivity extends BaseActivity implements BaseSwipeRefreshView{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+        Logger.i(LOG_TAG, "onCreate");
+
         setContentView(R.layout.activity_main);
         mVStatusBar = findViewById(R.id.virtual_status_bar);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        // When call Toolbar.setTitle(), in Toolbar inflate TextView and invoke addSystemView() method.
+        // It will be the first child.
+        mToolbar.setTitle(R.string.app_name);
+        for (int i = 0; i < mToolbar.getChildCount(); i++) {
+            Logger.i(LOG_TAG, "View " + mToolbar.getChildAt(i).toString());
+        }
+        View titleView = mToolbar.getChildAt(0);
+        if (titleView instanceof TextView) {
+            Logger.i(LOG_TAG, "child at 0 is title.");
+            ((AppCompatTextView) titleView).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+        }
+
         mToolbar.inflateMenu(R.menu.menu_main);
         mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
@@ -78,13 +93,7 @@ public class MainActivity extends BaseActivity implements BaseSwipeRefreshView{
                 }
             }
         });
-        mToolbar.setTitle(R.string.app_name);
         mMode = mToolbar.getMenu().findItem(R.id.change_mode);
-        View titleView = mToolbar.getChildAt(0);
-        if (titleView instanceof TextView) {
-            Logger.i(LOG_TAG, "child at 0 is instance of TextView");
-            ((AppCompatTextView) titleView).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
-        }
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -100,11 +109,10 @@ public class MainActivity extends BaseActivity implements BaseSwipeRefreshView{
         });
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            View view = findViewById(R.id.virtual_status_bar);
-            AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) view.getLayoutParams();
+            AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) mVStatusBar.getLayoutParams();
             params.height = CommonUtils.getStatusBarHeight(getBaseContext());
-            view.setLayoutParams(params);
-            view.setVisibility(View.VISIBLE);
+            mVStatusBar.setLayoutParams(params);
+            mVStatusBar.setVisibility(View.VISIBLE);
         }
 
         mRv = (RecyclerView) findViewById(R.id.main_rv);
@@ -123,6 +131,7 @@ public class MainActivity extends BaseActivity implements BaseSwipeRefreshView{
                         mPresenter.getEarlierNews();
                     }
                 }
+                // TODO change the title when scroll to title
             }
         });
         mRvAdapter = new MainRvAdapter();
@@ -146,6 +155,24 @@ public class MainActivity extends BaseActivity implements BaseSwipeRefreshView{
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
+        //  Use reflection to get private variable mTitleTextView. It will take some time.
+        try {
+            Class<? extends Toolbar> cls = mToolbar.getClass();
+            Field privateTvFiled = cls.getDeclaredField("mTitleTextView");
+            if (privateTvFiled != null) {
+                // 使用 private 类型的变量，就需要抑制 java 对权限的检查
+                privateTvFiled.setAccessible(true);
+                TextView tv = (TextView) privateTvFiled.get(mToolbar);
+                tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+                Logger.i(LOG_TAG, "use reflection to change the title size.");
+            }
+        } catch (ClassCastException | NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Logger.i(LOG_TAG, "use reflection occur exception.");
+        }
+
         if (prepareRefresh()) {
             mPresenter.getLatestNews();
         }

@@ -57,11 +57,11 @@ public class StoryContentFragment extends Fragment implements BaseFragment, Base
         });
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            View view = root.findViewById(R.id.virtual_status_bar);
-            AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) view.getLayoutParams();
+            mVStatusBar = root.findViewById(R.id.virtual_status_bar);
+            AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) mVStatusBar.getLayoutParams();
             params.height = CommonUtils.getStatusBarHeight(getContext());
-            view.setLayoutParams(params);
-            view.setVisibility(View.VISIBLE);
+            mVStatusBar.setLayoutParams(params);
+            mVStatusBar.setVisibility(View.VISIBLE);
         }
 
         Toolbar toolbar = (Toolbar) root.findViewById(R.id.toolbar);
@@ -95,8 +95,6 @@ public class StoryContentFragment extends Fragment implements BaseFragment, Base
                 onBackPressed();
             }
         });
-
-        mVStatusBar = root.findViewById(R.id.virtual_status_bar);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) root.findViewById(R.id.swipe_refresh_layout);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
