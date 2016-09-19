@@ -14,7 +14,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
@@ -46,7 +45,7 @@ public class MainActivity extends BaseActivity implements BaseSwipeRefreshView{
     private MainPresenter mPresenter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
-    private int mDayNightMode = AppCompatDelegate.MODE_NIGHT_AUTO;
+//    private int mDayNightMode = AppCompatDelegate.MODE_NIGHT_AUTO; // useless
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,8 +74,16 @@ public class MainActivity extends BaseActivity implements BaseSwipeRefreshView{
                 switch (item.getItemId()) {
                     case R.id.change_mode:
                         Logger.i(LOG_TAG, "onMenuItemClick change mode.");
+                        /**
+                         * 可以使用 uiMode 更新夜间模式
+                         * DisplayMetrics dm = sRes.getDisplayMetrics()
+                         * Configuration config = sRes.getConfiguration()
+                         * config.uiMode &= ~Configuration.UI_MODE_NIGHT_MASK
+                         * config.uiMode | on ? Configuration.UI_MODE_NIGHT_YES : Configuration.UI_MODE_NIGHT_NO
+                         * sRes.updateConfiguration(config, dm)
+                         */
                         if (item.getTitle().equals(getResources().getString(R.string.mode_night_yes))) {
-                            /***
+                            /**
                              * AppCompatDelegate.setDefaultNightMode 的设置是对整个 APP 的 theme 有效
                              * getDelegate.setLocalNightMode 的设置只是对于设置的地方有效
                              * getDelegate 设置的效果可以覆盖 AppCompatDelegate.setDefaultNightMode 效果
@@ -183,19 +190,20 @@ public class MainActivity extends BaseActivity implements BaseSwipeRefreshView{
     protected void onResume() {
         super.onResume();
         int uiMode = getResources().getConfiguration().uiMode;
-        int dayNightUiMode = uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        Logger.i(LOG_TAG, "uiMode default is " + uiMode);
+        int currentMode = uiMode & Configuration.UI_MODE_NIGHT_MASK;
 
-        if (dayNightUiMode == Configuration.UI_MODE_NIGHT_NO) {
-            mDayNightMode = AppCompatDelegate.MODE_NIGHT_NO;
+        if (currentMode == Configuration.UI_MODE_NIGHT_NO) {
+            Logger.i(LOG_TAG, "onResume mode is Configuration.UI_MODE_NIGHT_NO.");
+//            mDayNightMode = AppCompatDelegate.MODE_NIGHT_NO;
             mMode.setTitle(R.string.mode_night_yes);
-            mVStatusBar.setBackgroundResource(R.color.colorPrimaryDark);
-        } else if (dayNightUiMode == Configuration.UI_MODE_NIGHT_YES) {
-            mDayNightMode = AppCompatDelegate.MODE_NIGHT_YES;
+        } else if (currentMode == Configuration.UI_MODE_NIGHT_YES) {
+            Logger.i(LOG_TAG, "onResume mode is Configuration.UI_MODE_NIGHT_YES.");
+//            mDayNightMode = AppCompatDelegate.MODE_NIGHT_YES;
             mMode.setTitle(R.string.mode_night_no);
-            mVStatusBar.setBackgroundResource(R.color.colorPrimaryDarkNight);
         } else {
-            Logger.i(LOG_TAG, "onResume mode is AppCompatDelegate.MODE_NIGHT_AUTO");
-            mDayNightMode = AppCompatDelegate.MODE_NIGHT_AUTO;
+            Logger.i(LOG_TAG, "onResume mode is Configuration.UI_MODE_NIGHT_UNDEFINED?");
+//            mDayNightMode = AppCompatDelegate.MODE_NIGHT_AUTO;
             mMode.setTitle(R.string.mode_night_yes);
         }
     }

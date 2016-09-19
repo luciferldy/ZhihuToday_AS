@@ -13,6 +13,12 @@
         fresco:placeholderImage="@drawable/spinner_76_inner_holo"
         fresco:placeholderImageScaleType="centerInside"/>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="120dip"
+        android:layout_gravity="bottom"
+        android:background="@drawable/bottom_layout_selector" />
+
     <TextView
         android:id="@+id/text"
         android:layout_width="wrap_content"

@@ -11,7 +11,7 @@
         android:id="@+id/virtual_status_bar"
         android:layout_width="match_parent"
         android:layout_height="20dip"
-        android:background="@color/colorPrimaryDark"
+        android:background="?attr/colorPrimaryDark"
         android:visibility="gone"/>
 
     <android.support.v7.widget.Toolbar
