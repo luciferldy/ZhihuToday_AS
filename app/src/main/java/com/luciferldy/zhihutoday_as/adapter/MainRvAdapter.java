@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-
 /**
  * Created by Lucifer on 2016/8/30.
  */
@@ -88,11 +87,13 @@ public class MainRvAdapter extends RecyclerView.Adapter<MainRvAdapter.BaseViewHo
         // 占位
         DataWrapper topData = new DataWrapper();
         topData.viewType = ViewType.ITEM_TOP_STORIES;
+        topData.des = "首页";
         mList.add(topData);
 
         DataWrapper titleData = new DataWrapper();
         titleData.viewType = ViewType.ITEM_TITLE;
         titleData.title = date;
+        titleData.des = "今日热闻";
         mList.add(titleData);
 
         DataWrapper storyData;
@@ -102,6 +103,7 @@ public class MainRvAdapter extends RecyclerView.Adapter<MainRvAdapter.BaseViewHo
             storyData.id = story.getId();
             storyData.type = story.getType();
             storyData.title = story.getTitle();
+            storyData.des = date;
             storyData.gaPrefix = story.getGa_prefix();
             storyData.images = story.getImages();
             mList.add(storyData);
@@ -121,6 +123,7 @@ public class MainRvAdapter extends RecyclerView.Adapter<MainRvAdapter.BaseViewHo
         DataWrapper titleData = new DataWrapper();
         titleData.viewType = ViewType.ITEM_TITLE;
         titleData.title = date;
+        titleData.des = date;
         mList.add(titleData);
 
         // normal stories
@@ -131,6 +134,7 @@ public class MainRvAdapter extends RecyclerView.Adapter<MainRvAdapter.BaseViewHo
             storyData.id = story.getId();
             storyData.type = story.getType();
             storyData.title = story.getTitle();
+            storyData.des = date;
             storyData.gaPrefix = story.getGa_prefix();
             storyData.images = story.getImages();
             mList.add(storyData);
@@ -207,7 +211,7 @@ public class MainRvAdapter extends RecyclerView.Adapter<MainRvAdapter.BaseViewHo
             super.bindItem(data);
 
             List<View> views = new ArrayList<>();
-            for (NewsGson.TopStoriesBean top : mTopList) {
+            for (final NewsGson.TopStoriesBean top : mTopList) {
                 Logger.i(LOG_TAG, "top stories = " + top.toString());
                 View page = LayoutInflater.from(parent.getContext()).inflate(R.layout.top_story_pager, null);
                 SimpleDraweeView image = (SimpleDraweeView) page.findViewById(R.id.image);
@@ -218,7 +222,7 @@ public class MainRvAdapter extends RecyclerView.Adapter<MainRvAdapter.BaseViewHo
                 page.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        listener.onClick(MainPresenter.URL_DAILY_STORY + data.id);
+                        listener.onClick(MainPresenter.URL_DAILY_STORY + top.getId());
                     }
                 });
             }
@@ -288,7 +292,7 @@ public class MainRvAdapter extends RecyclerView.Adapter<MainRvAdapter.BaseViewHo
     /**
      * 几种 item 的类型
      */
-    enum ViewType {
+    private enum ViewType {
         ITEM_TOP_STORIES,
         ITEM_TITLE,
         ITEM_STORIES
@@ -297,16 +301,41 @@ public class MainRvAdapter extends RecyclerView.Adapter<MainRvAdapter.BaseViewHo
     /**
      * 封装数据类
      */
-    class DataWrapper {
+    private class DataWrapper {
         ViewType viewType;
         int id;
         int type;
         String gaPrefix;
         String title;
+        String des;
         List<String> images;
     }
 
     public interface ClickItem {
         void onClick(String url);
+    }
+
+    /**
+     * 获得特定 Item 的描述
+     * @param position item 在 list 中的位置
+     * @return
+     */
+    public String getDescription(int position) {
+        if (position < mList.size()) {
+            int viewtpye = getItemViewType(position);
+            String des;
+            if (viewtpye == ViewType.ITEM_TOP_STORIES.ordinal()) {
+                des = mList.get(position).des;
+            } else if (viewtpye == ViewType.ITEM_TITLE.ordinal()) {
+                des = mList.get(position).des;
+            } else if (viewtpye == ViewType.ITEM_STORIES.ordinal()) {
+                des = mList.get(position).des;
+            } else {
+                des = "";
+            }
+            return des;
+        } else {
+            return "";
+        }
     }
 }

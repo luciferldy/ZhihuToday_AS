@@ -41,6 +41,7 @@ public class MainActivity extends BaseActivity implements BaseSwipeRefreshView{
     private Toolbar mToolbar;
     private MenuItem mMode;
     private View mVStatusBar;
+    private LinearLayoutManager mLayoutManager;
     private MainRvAdapter mRvAdapter;
     private MainPresenter mPresenter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
@@ -61,6 +62,8 @@ public class MainActivity extends BaseActivity implements BaseSwipeRefreshView{
         for (int i = 0; i < mToolbar.getChildCount(); i++) {
             Logger.i(LOG_TAG, "View " + mToolbar.getChildAt(i).toString());
         }
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar.setTitle(R.string.des_main);
         View titleView = mToolbar.getChildAt(0);
         if (titleView instanceof TextView) {
             Logger.i(LOG_TAG, "child at 0 is title.");
@@ -124,22 +127,30 @@ public class MainActivity extends BaseActivity implements BaseSwipeRefreshView{
         }
 
         mRv = (RecyclerView) findViewById(R.id.main_rv);
-        final LinearLayoutManager layoutManager = new LinearLayoutManager(getBaseContext());
-        mRv.setLayoutManager(layoutManager);
+        mLayoutManager = new LinearLayoutManager(getBaseContext());
+        mRv.setLayoutManager(mLayoutManager);
         mRv.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-//                Logger.i(LOG_TAG, "onScrollStateChanged. LayoutManager.findLastCompletelyVisibleItemPosition=" + layoutManager.findLastCompletelyVisibleItemPosition()
+//                Logger.i(LOG_TAG, "onScrollStateChanged. LayoutManager.findLastCompletelyVisibleItemPosition=" + mLayoutManager.findLastCompletelyVisibleItemPosition()
 //                        + ", Item count=" + mRvAdapter.getItemCount());
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    boolean isBottom = layoutManager.findLastCompletelyVisibleItemPosition() > mRvAdapter.getItemCount() - 3;
+                    boolean isBottom = mLayoutManager.findLastCompletelyVisibleItemPosition() > mRvAdapter.getItemCount() - 3;
                     if (prepareRefresh() && isBottom) {
                         Logger.i(LOG_TAG, "slide to the bottom, ready to load more data.");
                         mPresenter.getEarlierNews();
                     }
                 }
                 // TODO change the title when scroll to title
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                String des = mRvAdapter.getDescription(mLayoutManager.findFirstVisibleItemPosition());
+                des = TextUtils.isEmpty(des) ? getString(R.string.app_name) : des;
+                mToolbar.setTitle(des);
             }
         });
         mRvAdapter = new MainRvAdapter();

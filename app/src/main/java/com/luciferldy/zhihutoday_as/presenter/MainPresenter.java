@@ -3,6 +3,7 @@ package com.luciferldy.zhihutoday_as.presenter;
 import android.app.Activity;
 import android.os.Looper;
 
+import com.luciferldy.zhihutoday_as.R;
 import com.luciferldy.zhihutoday_as.ui.activity.MainActivity;
 import com.luciferldy.zhihutoday_as.api.NewsApi;
 import com.luciferldy.zhihutoday_as.model.NewsGson;
@@ -81,7 +82,7 @@ public class MainPresenter extends BasePresenter<MainActivity> {
                     public void onNext(NewsGson newsGson) {
                         Logger.i(LOG_TAG, "getLatestNews onNext");
                         if (mView != null) {
-                            mView.fillData("今日热闻", newsGson);
+                            mView.fillData(mActivity.getString(R.string.daily_news), newsGson);
                         }
                     }
                 });
