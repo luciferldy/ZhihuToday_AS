@@ -1,7 +1,6 @@
 package com.luciferldy.zhihutoday_as.presenter;
 
 import android.app.Activity;
-import android.os.Looper;
 
 import com.luciferldy.zhihutoday_as.R;
 import com.luciferldy.zhihutoday_as.ui.activity.MainActivity;
@@ -110,7 +109,7 @@ public class MainPresenter extends BasePresenter<MainActivity> {
         DateFormat format = new SimpleDateFormat("yyyyMMdd", Locale.CHINA);
         String dateStr = format.format(date);
         Logger.i(LOG_TAG, "dateStr=" + dateStr);
-        mEarlierSub = service.getEarlierNews(dateStr).subscribeOn(Schedulers.io())
+        mEarlierSub = service.getEarlyNews(dateStr).subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .map(new Func1<NewsGson, List<NewsGson.StoriesBean>>() {
                     @Override
@@ -123,19 +122,19 @@ public class MainPresenter extends BasePresenter<MainActivity> {
                     @Override
                     public void onCompleted() {
                         isLoading = false;
-                        Logger.i(LOG_TAG, "getEarlierNews onCompleted.");
+                        Logger.i(LOG_TAG, "getEarlyNews onCompleted.");
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         isLoading = false;
-                        Logger.i(LOG_TAG, "getEarlierNews onError, msg=" + e.getMessage());
+                        Logger.i(LOG_TAG, "getEarlyNews onError, msg=" + e.getMessage());
                         e.printStackTrace();
                     }
 
                     @Override
                     public void onNext(List<NewsGson.StoriesBean> storiesBeen) {
-                        Logger.i(LOG_TAG, "getEarlierNews onNext");
+                        Logger.i(LOG_TAG, "getEarlyNews onNext");
                         if (mView != null) {
                             mCalendar.add(Calendar.DATE, -1);
                             Date afterDate = mCalendar.getTime();

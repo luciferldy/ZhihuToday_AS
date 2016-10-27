@@ -9,6 +9,7 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <!--   theme UI controls like checkboxes and text fields -->
         <item name="colorAccent">@color/colorAccent</item>
+
     </style>
     
     <style name="AppThemeDayNight.NoActionBar">

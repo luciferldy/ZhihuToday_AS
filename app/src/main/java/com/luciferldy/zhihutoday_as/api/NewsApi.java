@@ -4,6 +4,7 @@ import com.luciferldy.zhihutoday_as.model.NewsGson;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import rx.Observable;
@@ -20,7 +21,7 @@ public interface NewsApi {
      * @return
      */
     @GET("news/before/{date}")
-    Observable<NewsGson> getEarlierNews(@Path("date") String date);
+    Observable<NewsGson> getEarlyNews(@Path("date") String date);
 
     /**
      * 获得最新的新闻
@@ -29,4 +30,11 @@ public interface NewsApi {
     @GET("news/latest")
     Observable<NewsGson> getLatestNews();
 
+    /**
+     * 获得启动图片
+     * @param pixel 启动图片的分辨率
+     * @return
+     */
+    @GET("{pixel}")
+    Observable<ResponseBody> getStartImage(@Path("pixel") String pixel);
 }

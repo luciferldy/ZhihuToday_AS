@@ -1,34 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/md_black">
 
-        <com.facebook.drawee.view.SimpleDraweeView
-            xmlns:fresco="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/start_iv"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            fresco:actualImageScaleType="centerCrop"
-            fresco:placeholderImage="@drawable/start"
-            fresco:placeholderImageScaleType="centerCrop"
-            android:visibility="gone"/>
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/start_iv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="84dip"
+        fresco:actualImageScaleType="centerCrop"
+        fresco:placeholderImageScaleType="centerCrop"
+        android:visibility="visible"/>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="80dip"
-            android:layout_alignParentBottom="true"
-            android:background="@drawable/bottom_layout_selector" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="80dip"
+        android:layout_marginBottom="84dip"
+        android:layout_gravity="bottom"
+        android:background="@drawable/bottom_layout_selector"
+        android:id="@+id/view" />
+
+    <TextView
+        android:id="@+id/author_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="90dip"
+        android:textSize="12sp"
+        android:textColor="@color/md_white"
+        android:alpha="0.5"
+        android:layout_gravity="bottom|center_horizontal"/>
+
+    <RelativeLayout
+        android:id="@+id/icon_layout"
+        android:layout_width="match_parent"
+        android:layout_height="84dip"
+        android:translationY="84dip"
+        android:paddingLeft="24dip"
+        android:layout_gravity="bottom"
+        android:background="@android:color/black">
+
+        <com.luciferldy.zhihutoday_as.ui.view.IconView
+            android:id="@+id/icon_view"
+            android:layout_width="44dip"
+            android:layout_height="44dip"
+            android:layout_marginRight="11dip"
+            android:layout_marginEnd="11dip"
+            android:layout_centerVertical="true"
+            android:background="@drawable/icon_view_border"
+            app:stroke_width="5dip"
+            app:stroke_color="@color/md_grey_300"
+            app:radius="14dip"/>
 
         <TextView
-            android:id="@+id/tvAuthor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:text="@string/splash_text"
-            android:textSize="12sp"
-            android:textColor="@color/md_white"
-            android:alpha="0.5"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true" />
+            android:layout_toRightOf="@id/icon_view"
+            android:layout_toEndOf="@id/icon_view"
+            android:layout_alignTop="@id/icon_view"
+            android:layout_marginTop="4dip"
+            android:textColor="@color/md_grey_200"
+            android:textSize="16dip"
+            android:text="知乎日报"/>
 
-</RelativeLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/icon_view"
+            android:layout_toEndOf="@id/icon_view"
+            android:layout_alignBottom="@id/icon_view"
+            android:layout_marginBottom="4dip"
+            android:textColor="@color/md_grey_500"
+            android:textSize="10dip"
+            android:text="每天三次，每次七分钟"/>
+    </RelativeLayout>
+
+</FrameLayout>
