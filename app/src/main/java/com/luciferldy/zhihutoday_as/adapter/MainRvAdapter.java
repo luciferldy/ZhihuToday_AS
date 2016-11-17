@@ -59,9 +59,10 @@ public class MainRvAdapter extends RecyclerView.Adapter<MainRvAdapter.BaseViewHo
     @Override
     public void onBindViewHolder(BaseViewHolder holder, int position) {
         holder.bindItem(mList.get(position));
-        if (holder instanceof StoriesViewHolder) {
-            showItemAnim(holder.parent, position);
-        }
+        // 增加动画效果有时会导致 CardView 的 cardElevation 属性消失
+//        if (holder instanceof StoriesViewHolder) {
+//            showItemAnim(holder.parent, position);
+//        }
     }
 
     @Override
