@@ -6,7 +6,6 @@ import android.os.Message;
 import android.support.v4.view.ViewPager;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 
 import com.luciferldy.zhihutoday_as.R;
@@ -26,15 +25,18 @@ public class BillBoardView extends FrameLayout {
     private static final String LOG_TAG = BillBoardView.class.getSimpleName();
     private static final int MESSAGE_SCROLL = 123;
     private int dotScrollInterval = 3; // unit s
+    private ViewPager viewPager;
+    private Context mContext;
+
+    // 弃用的 indicator
     private int dotCount;
     private float mAnimDistance;
-
-    private ViewPager viewPager;
     private View dotCursor;
     private List<View> dotGroup;
-    private Context mContext;
     private FrameLayout.LayoutParams cursorParams;
     private List<FrameLayout.LayoutParams> dotParams;
+
+    private IndicatorView mIdView;
 
     private Handler handler = new Handler() {
         @Override
@@ -70,35 +72,39 @@ public class BillBoardView extends FrameLayout {
 
     public void start(List<View> views, int interval, int animationDuration) {
         init(views, interval, animationDuration);
+        invalidate();
     }
 
     private void init(List<View> views, final int interval, int animationDuration) {
         inflate(mContext, R.layout.news_item_top_stories, this);
 
         viewPager = (ViewPager) findViewById(R.id.pager);
-        dotCursor = findViewById(R.id.dot_cursor);
+        mIdView = (IndicatorView) findViewById(R.id.indicator_view);
 
-        dotCount = views.size();
-        dotGroup = new ArrayList<>();
-        // add views
-        for (int i = 0; i < dotCount; i++) {
-            View dot = new View(getContext());
-            dot.setBackgroundDrawable(getResources().getDrawable(R.drawable.dot_normal));
-            addView(dot);
-            dotGroup.add(dot);
-        }
+//        dotCursor = findViewById(R.id.dot_cursor);
 
-        removeView(dotCursor);
-        addView(dotCursor);
-
-        this.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-            @Override
-            public boolean onPreDraw() {
-                BillBoardView.this.getViewTreeObserver().removeOnPreDrawListener(this);
-                initDotsAndCursorLayout();
-                return true;
-            }
-        });
+//        dotCount = views.size();
+//        dotGroup = new ArrayList<>();
+//
+//        // add views
+//        for (int i = 0; i < dotCount; i++) {
+//            View dot = new View(getContext());
+//            dot.setBackgroundDrawable(getResources().getDrawable(R.drawable.dot_normal));
+//            addView(dot);
+//            dotGroup.add(dot);
+//        }
+//
+//        removeView(dotCursor);
+//        addView(dotCursor);
+//
+//        this.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+//            @Override
+//            public boolean onPreDraw() {
+//                BillBoardView.this.getViewTreeObserver().removeOnPreDrawListener(this);
+//                initDotsAndCursorLayout();
+//                return true;
+//            }
+//        });
 
         BillBoardViewAdapter adapter = new BillBoardViewAdapter(views);
         viewPager.setAdapter(adapter);
@@ -129,18 +135,20 @@ public class BillBoardView extends FrameLayout {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 Logger.i(LOG_TAG, "onPageScrolled position=" + position + ", positionOffset=" + positionOffset + ", positionOffsetPixels=" + positionOffsetPixels);
-                if (dotParams != null && position < dotParams.size()) {
-                    cursorParams.leftMargin = (int) (dotParams.get(position).leftMargin + mAnimDistance * positionOffset);
-                    dotCursor.setLayoutParams(cursorParams);
-                }
+                mIdView.moveIndicator(position, positionOffset, positionOffsetPixels);
+//                if (dotParams != null && position < dotParams.size()) {
+//                    cursorParams.leftMargin = (int) (dotParams.get(position).leftMargin + mAnimDistance * positionOffset);
+//                    dotCursor.setLayoutParams(cursorParams);
+//                }
             }
 
             @Override
             public void onPageSelected(int position) {
-                if (dotParams != null && position < dotParams.size()) {
-                    cursorParams.leftMargin = dotParams.get(position).leftMargin;
-                    dotCursor.setLayoutParams(cursorParams);
-                }
+                mIdView.setCurrentPosition(position);
+//                if (dotParams != null && position < dotParams.size()) {
+//                    cursorParams.leftMargin = dotParams.get(position).leftMargin;
+//                    dotCursor.setLayoutParams(cursorParams);
+//                }
             }
 
             @Override

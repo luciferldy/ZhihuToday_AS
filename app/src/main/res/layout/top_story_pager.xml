@@ -10,8 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="225dip"
         fresco:actualImageScaleType="centerCrop"
-        fresco:placeholderImage="@drawable/spinner_76_inner_holo"
-        fresco:placeholderImageScaleType="centerInside"/>
+        fresco:placeholderImageScaleType="centerInside"
+        fresco:placeholderImage="@drawable/spinner_76_inner_holo"/>
 
     <View
         android:layout_width="match_parent"

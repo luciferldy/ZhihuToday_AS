@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:indicator="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     
@@ -8,11 +9,24 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <com.luciferldy.zhihutoday_as.ui.view.IndicatorView
+        android:id="@+id/indicator_view"
+        android:layout_width="match_parent"
+        android:layout_height="13dip"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="10dip"
+        indicator:indicator_count="5"
+        indicator:indicator_distance="4dip"
+        indicator:indicator_size="6dip"
+        indicator:indicator_normal_color="@color/md_white"
+        indicator:indicator_selected_color="@color/md_grey_700" />
+
     <View
         android:id="@+id/dot_cursor"
         android:layout_width="7dip"
         android:layout_height="7dip"
         android:background="@drawable/dot_selected"
-        android:layout_gravity="bottom" />
+        android:layout_gravity="bottom"
+        android:visibility="gone"/>
 
 </merge>

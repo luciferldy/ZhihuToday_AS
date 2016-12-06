@@ -5,4 +5,11 @@
         <attr name="stroke_color" format="color" />
         <attr name="radius" format="dimension" />
     </declare-styleable>
+    <declare-styleable name="IndicatorView">
+        <attr name="indicator_count" format="integer" />
+        <attr name="indicator_distance" format="dimension" />
+        <attr name="indicator_size" format="dimension" />
+        <attr name="indicator_normal_color" format="color" />
+        <attr name="indicator_selected_color" format="color" />
+    </declare-styleable>
 </resources>
