@@ -2,6 +2,7 @@ package com.luciferldy.zhihutoday_as.ui.activity;
 
 import android.content.res.Configuration;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.AppCompatTextView;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -153,6 +155,7 @@ public class MainActivity extends BaseActivity implements BaseSwipeRefreshView{
                 mToolbar.setTitle(des);
             }
         });
+//        mRv.setItemAnimator(new DefaultItemAnimator());
         mRvAdapter = new MainRvAdapter();
         mRvAdapter.setClickItem(new MainRvAdapter.ClickItem() {
             @Override
