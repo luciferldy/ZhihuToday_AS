@@ -9,4 +9,7 @@
     <string name="splash_text">"@luciferldy"</string>
     <string name="des_main">首页</string>
     <string name="daily_news">今日热闻</string>
+
+    <string name="drawer_open">drawer open</string>
+    <string name="drawer_close">drawer close</string>
 </resources>

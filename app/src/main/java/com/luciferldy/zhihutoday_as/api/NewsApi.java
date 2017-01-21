@@ -1,10 +1,9 @@
 package com.luciferldy.zhihutoday_as.api;
 
 import com.luciferldy.zhihutoday_as.model.NewsGson;
+import com.luciferldy.zhihutoday_as.model.ThemeListGson;
 
 import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import rx.Observable;
@@ -37,4 +36,17 @@ public interface NewsApi {
      */
     @GET("{pixel}")
     Observable<ResponseBody> getStartImage(@Path("pixel") String pixel);
+
+    /**
+     * 主题列表日报查看
+     * http://news-at.zhihu.com/api/4/themes
+     * @return
+     */
+    @GET("themes")
+    Observable<ThemeListGson> getThemesList();
+
+
+
+
+
 }

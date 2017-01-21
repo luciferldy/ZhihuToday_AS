@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="50dip"
+    android:paddingLeft="16dip"
+    android:gravity="center_vertical"
+    android:background="#f0f0f0">
+
+    <ImageView
+        android:layout_width="31dip"
+        android:layout_height="31dip"
+        android:scaleType="centerCrop"
+        android:src="@drawable/home"
+        android:id="@+id/imageView" />
+    
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="18dip"
+        android:layout_marginLeft="10dip"
+        android:gravity="center_vertical"
+        android:textColor="@color/colorPrimary"
+        android:text="首页"/>
+
+</LinearLayout>

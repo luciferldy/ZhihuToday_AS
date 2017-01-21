@@ -62,9 +62,10 @@ public class MainRvAdapter extends RecyclerView.Adapter<MainRvAdapter.BaseViewHo
         // 增加动画效果有时会导致 CardView 的 cardElevation 属性消失
         // 更新 修复 CardView 的 cardElevation 消失问题
         // 将 showItemAnim(holder.parent, position) 改成 showItemAnim(((StoriesViewHolder) holder).itemView, position)
-        if (holder instanceof StoriesViewHolder) {
-            showItemAnim(((StoriesViewHolder) holder).itemView, position);
-        }
+        // Shit 还是有问题
+//        if (holder instanceof StoriesViewHolder) {
+//            showItemAnim(((StoriesViewHolder) holder).itemView, position);
+//        }
     }
 
     @Override

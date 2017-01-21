@@ -8,7 +8,7 @@
 
 ### 简介
 
-![PP](art/presentation.gif)
+![PP](art/intro.gif)
 
 首页使用 Activity ，日报的详情页使用 Fragment 的 WebView 展示。每个界面独立的 ToolBar ，适配4.4的半透明状态栏和5.0的透明状态栏。
 

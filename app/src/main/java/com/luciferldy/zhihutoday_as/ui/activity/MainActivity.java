@@ -7,8 +7,10 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -22,8 +24,10 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.luciferldy.zhihutoday_as.R;
+import com.luciferldy.zhihutoday_as.adapter.DrawerRvAdapter;
 import com.luciferldy.zhihutoday_as.adapter.MainRvAdapter;
 import com.luciferldy.zhihutoday_as.model.NewsGson;
+import com.luciferldy.zhihutoday_as.model.ThemeListGson;
 import com.luciferldy.zhihutoday_as.presenter.MainPresenter;
 import com.luciferldy.zhihutoday_as.ui.fragment.BaseFragment;
 import com.luciferldy.zhihutoday_as.ui.fragment.StoryContentFragment;
@@ -33,6 +37,7 @@ import com.luciferldy.zhihutoday_as.utils.FragmentUtils;
 import com.luciferldy.zhihutoday_as.utils.Logger;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends BaseActivity implements BaseSwipeRefreshView{
@@ -46,6 +51,7 @@ public class MainActivity extends BaseActivity implements BaseSwipeRefreshView{
     private LinearLayoutManager mLayoutManager;
     private MainRvAdapter mRvAdapter;
     private MainPresenter mPresenter;
+    private DrawerRvAdapter mDrawerRvAdapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
 //    private int mDayNightMode = AppCompatDelegate.MODE_NIGHT_AUTO; // useless
@@ -172,6 +178,7 @@ public class MainActivity extends BaseActivity implements BaseSwipeRefreshView{
         });
         mRv.setAdapter(mRvAdapter);
         initPresenter();
+        initDrawer();
     }
 
     @Override
@@ -282,5 +289,39 @@ public class MainActivity extends BaseActivity implements BaseSwipeRefreshView{
     @Override
     public void onRefreshStart() {
         mPresenter.getLatestNews();
+    }
+
+    public void updateThemes(List<ThemeListGson.OthersBean> beans) {
+        mDrawerRvAdapter.update(beans);
+    }
+
+    private void initDrawer() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.main_drawer);
+
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, mToolbar, R.string.drawer_open, R.string.drawer_close){
+            @Override
+            public void syncState() {
+                super.syncState();
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                Logger.i(LOG_TAG, "onDrawerOpened");
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+                Logger.i(LOG_TAG, "onDrawerClosed");
+            }
+        };
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+        RecyclerView drawerRv = (RecyclerView) findViewById(R.id.drawer_rv);
+        drawerRv.setLayoutManager(new LinearLayoutManager(getBaseContext()));
+        mDrawerRvAdapter = new DrawerRvAdapter();
+        drawerRv.setAdapter(mDrawerRvAdapter);
+        mPresenter.getThemesList();
     }
 }

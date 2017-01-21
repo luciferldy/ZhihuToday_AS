@@ -3,6 +3,8 @@ package com.luciferldy.zhihutoday_as.presenter;
 import android.app.Activity;
 
 import com.luciferldy.zhihutoday_as.R;
+import com.luciferldy.zhihutoday_as.adapter.DrawerRvAdapter;
+import com.luciferldy.zhihutoday_as.model.ThemeListGson;
 import com.luciferldy.zhihutoday_as.ui.activity.MainActivity;
 import com.luciferldy.zhihutoday_as.api.NewsApi;
 import com.luciferldy.zhihutoday_as.model.NewsGson;
@@ -10,6 +12,7 @@ import com.luciferldy.zhihutoday_as.utils.Logger;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -31,13 +34,15 @@ public class MainPresenter extends BasePresenter<MainActivity> {
 
     private static final String LOG_TAG = MainPresenter.class.getSimpleName();
 
-    public static final String URL_START_IMAGE = "http://news-at.zhihu.com/api/4/start-image/1080*1776";
-    public static final String URL_LATEST_NEWS = "http://news-at.zhihu.com/api/4/";
-    public static final String URL_EARLIER_NEWS = "http://news.at.zhihu.com/api/4/";
+    public static final String BASE_URL = "http://news-at.zhihu.com/api/4/";
+    private static final String URL_LATEST_NEWS = "http://news-at.zhihu.com/api/4/";
+    private static final String URL_EARLIER_NEWS = "http://news.at.zhihu.com/api/4/";
     public static final String URL_DAILY_STORY = "http://daily.zhihu.com/story/";
 
+    private Retrofit mRetrofit;
     private Subscription mLatestSub;
     private Subscription mEarlierSub;
+    private Subscription mThemeListSub;
     private Calendar mCalendar;
 
     private boolean isLoading = false;
@@ -54,12 +59,13 @@ public class MainPresenter extends BasePresenter<MainActivity> {
     public synchronized void getLatestNews() {
 
         isLoading = true;
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(URL_LATEST_NEWS)
+        if (mRetrofit == null)
+            mRetrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
-        NewsApi service = retrofit.create(NewsApi.class);
+        NewsApi service = mRetrofit.create(NewsApi.class);
         String date = "";
         mLatestSub = service.getLatestNews().subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -99,12 +105,13 @@ public class MainPresenter extends BasePresenter<MainActivity> {
      */
     public synchronized void getEarlierNews() {
         isLoading = true;
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(URL_EARLIER_NEWS)
+        if (mRetrofit == null)
+            mRetrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
-        NewsApi service = retrofit.create(NewsApi.class);
+        NewsApi service = mRetrofit.create(NewsApi.class);
         Date date = mCalendar.getTime();
         DateFormat format = new SimpleDateFormat("yyyyMMdd", Locale.CHINA);
         String dateStr = format.format(date);
@@ -135,18 +142,51 @@ public class MainPresenter extends BasePresenter<MainActivity> {
                     @Override
                     public void onNext(List<NewsGson.StoriesBean> storiesBeen) {
                         Logger.i(LOG_TAG, "getEarlyNews onNext");
-                        if (mView != null) {
-                            mCalendar.add(Calendar.DATE, -1);
-                            Date afterDate = mCalendar.getTime();
-                            DateFormat afterDateFormat = new SimpleDateFormat("yyyy年MM月dd日 E");
-                            String afterDateStr = afterDateFormat.format(afterDate);
-                            mView.appendMore(afterDateStr, storiesBeen);
-
-                        }
+                        if (mView == null)
+                            return;
+                        mCalendar.add(Calendar.DATE, -1);
+                        Date afterDate = mCalendar.getTime();
+                        DateFormat afterDateFormat = new SimpleDateFormat("yyyy年MM月dd日 E");
+                        String afterDateStr = afterDateFormat.format(afterDate);
+                        mView.appendMore(afterDateStr, storiesBeen);
                     }
                 });
 
 
+    }
+
+    /**
+     * 获得主题列表
+     */
+    public synchronized void getThemesList() {
+        if (mRetrofit == null)
+            mRetrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .build();
+        NewsApi newsApi = mRetrofit.create(NewsApi.class);
+        mThemeListSub = newsApi.getThemesList().subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<ThemeListGson>() {
+                    @Override
+                    public void onCompleted() {
+                        Logger.i(LOG_TAG, "getThemesList onCompleted");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Logger.i(LOG_TAG, "getThemesList onError, " + e.getMessage());
+                    }
+
+                    @Override
+                    public void onNext(ThemeListGson themeListGson) {
+                        if (mView == null)
+                            return;
+                        Logger.i(LOG_TAG, "getThemesList onNext updateThemes " + themeListGson.getOthers().size());
+                        mView.updateThemes(themeListGson.getOthers());
+                    }
+                });
     }
 
     /**
@@ -166,6 +206,9 @@ public class MainPresenter extends BasePresenter<MainActivity> {
         }
         if (mEarlierSub != null && mEarlierSub.isUnsubscribed()) {
             mEarlierSub.unsubscribe();
+        }
+        if (mThemeListSub != null && mThemeListSub.isUnsubscribed()) {
+            mThemeListSub.unsubscribe();
         }
     }
 }

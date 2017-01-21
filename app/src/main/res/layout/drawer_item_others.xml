@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="50dip"
+    android:paddingLeft="16dip"
+    android:paddingRight="53.33dip"
+    android:background="@color/md_white">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="18dip"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+        android:textColor="@color/md_black"
+        android:text="用户推荐日报"/>
+    
+    <ImageView
+        android:id="@+id/ic_follow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|right"
+        android:src="@drawable/menu_arrow"/>
+
+</FrameLayout>
