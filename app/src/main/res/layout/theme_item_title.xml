@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="224dip">
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/theme_img"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        fresco:actualImageScaleType="centerCrop"
+        fresco:placeholderImage="@drawable/theme_bg"
+        fresco:placeholderImageScaleType="centerCrop"/>
+
+    <TextView
+        android:id="@+id/theme_des"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginLeft="15dip"
+        android:layout_marginRight="15dip"
+        android:layout_marginBottom="25dip"
+        android:textColor="@color/md_white"
+        android:textSize="16dip"
+        android:textColorHint="@color/md_white"
+        android:hint="内容由知乎用户推荐，海纳主题百万，趣味上天入地" />
+</FrameLayout>

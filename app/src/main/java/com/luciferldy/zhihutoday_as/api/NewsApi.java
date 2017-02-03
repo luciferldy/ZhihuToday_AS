@@ -36,17 +36,4 @@ public interface NewsApi {
      */
     @GET("{pixel}")
     Observable<ResponseBody> getStartImage(@Path("pixel") String pixel);
-
-    /**
-     * 主题列表日报查看
-     * http://news-at.zhihu.com/api/4/themes
-     * @return
-     */
-    @GET("themes")
-    Observable<ThemeListGson> getThemesList();
-
-
-
-
-
 }

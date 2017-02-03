@@ -19,7 +19,7 @@ public class ShareUtils  {
         Intent shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND);
         shareIntent.putExtra(Intent.EXTRA_TEXT, text);
-        shareIntent.setType("text/plain");
+        shareIntent.setType("name/plain");
 
         //设置分享列表的标题，并且每次都显示分享列表
         context.startActivity(Intent.createChooser(shareIntent, "分享到"));

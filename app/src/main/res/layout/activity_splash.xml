@@ -13,6 +13,8 @@
         android:layout_marginBottom="84dip"
         fresco:actualImageScaleType="centerCrop"
         fresco:placeholderImageScaleType="centerCrop"
+        fresco:failureImageScaleType="centerCrop"
+        fresco:failureImage="@drawable/start"
         android:visibility="visible"/>
 
     <View

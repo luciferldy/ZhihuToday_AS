@@ -2,8 +2,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/change_mode"
+        android:id="@+id/action_change_mode"
         android:orderInCategory="100"
         android:title="@string/mode_night_yes"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_add"
+        android:orderInCategory="100"
+        android:title="follow"
+        android:icon="@drawable/theme_add"
+        app:showAsAction="ifRoom" />
 </menu>

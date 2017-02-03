@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/editor_group"
+    android:layout_width="match_parent"
+    android:layout_height="30dip"
+    android:layout_marginTop="12dip"
+    android:layout_marginBottom="12dip"
+    android:layout_marginStart="8dip"
+    android:layout_marginLeft="8dip"
+    android:orientation="horizontal"
+    android:gravity="center_vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="16dip"
+        android:layout_marginEnd="16dip"
+        android:layout_marginRight="16dip"
+        android:textColor="#6F6F6F"
+        android:text="主编"/>
+
+</LinearLayout>

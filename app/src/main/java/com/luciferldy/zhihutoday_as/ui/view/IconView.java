@@ -20,6 +20,7 @@ import com.luciferldy.zhihutoday_as.utils.Logger;
 
 /**
  * Created by Lucifer on 2016/10/25.
+ * 启动页知乎的3/4圆的图标
  */
 
 public class IconView extends View {

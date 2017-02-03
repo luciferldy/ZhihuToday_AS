@@ -3,4 +3,6 @@
     <color name="colorPrimary">#00A2ED</color>
     <color name="colorPrimaryDark">#1976D2</color>
     <color name="colorAccent">#ff4081</color>
+    <color name="drawerItemSelected">#f0f0f0</color>
+    <color name="drawerItemNormal">#ffffff</color>
 </resources>

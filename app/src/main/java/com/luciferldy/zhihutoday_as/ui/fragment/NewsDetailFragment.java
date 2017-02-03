@@ -10,7 +10,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -25,6 +24,7 @@ import android.widget.Toast;
 
 import com.luciferldy.zhihutoday_as.R;
 import com.luciferldy.zhihutoday_as.ui.view.BaseSwipeRefreshView;
+import com.luciferldy.zhihutoday_as.ui.view.BaseView;
 import com.luciferldy.zhihutoday_as.utils.CommonUtils;
 import com.luciferldy.zhihutoday_as.utils.FragmentUtils;
 import com.luciferldy.zhihutoday_as.utils.Logger;
@@ -32,12 +32,12 @@ import com.luciferldy.zhihutoday_as.utils.ShareUtils;
 
 /**
  * Created by Lucifer on 2016/9/4.
- * 故事内容页
+ * 新闻内容详情
  */
-public class StoryContentFragment extends Fragment implements BaseFragment, BaseSwipeRefreshView {
+public class NewsDetailFragment extends Fragment implements BaseFragment, BaseSwipeRefreshView, BaseView {
 
     public static final String BUNDLE_URL = "story_url";
-    private static final String LOG_TAG = StoryContentFragment.class.getSimpleName();
+    private static final String LOG_TAG = NewsDetailFragment.class.getSimpleName();
 
     private WebView mWebView;
     private View mVStatusBar;
@@ -78,7 +78,7 @@ public class StoryContentFragment extends Fragment implements BaseFragment, Base
                         ShareUtils.shareText(getContext(), mUrl);
                         break;
                     case R.id.copy_url:
-                        CommonUtils.copyText(getContext(), StoryContentFragment.BUNDLE_URL, mUrl);
+                        CommonUtils.copyText(getContext(), NewsDetailFragment.BUNDLE_URL, mUrl);
                         Toast.makeText(getContext(), "已经复制到剪贴板", Toast.LENGTH_SHORT).show();
                         break;
                     default:
@@ -128,13 +128,13 @@ public class StoryContentFragment extends Fragment implements BaseFragment, Base
         int uiMode = getResources().getConfiguration().uiMode;
         int dayNightUiMode = uiMode & Configuration.UI_MODE_NIGHT_MASK;
 
-        if (dayNightUiMode == Configuration.UI_MODE_NIGHT_NO) {
-            mVStatusBar.setBackgroundResource(R.color.colorPrimaryDark);
-        } else if (dayNightUiMode == Configuration.UI_MODE_NIGHT_YES) {
-            mVStatusBar.setBackgroundResource(R.color.colorPrimaryDarkNight);
-        } else {
-            Logger.i(LOG_TAG, "onResume mode is AppCompatDelegate.MODE_NIGHT_AUTO");
-        }
+//        if (dayNightUiMode == Configuration.UI_MODE_NIGHT_NO) {
+//            mVStatusBar.setBackgroundResource(R.color.colorPrimaryDark);
+//        } else if (dayNightUiMode == Configuration.UI_MODE_NIGHT_YES) {
+//            mVStatusBar.setBackgroundResource(R.color.colorPrimaryDarkNight);
+//        } else {
+//            Logger.i(LOG_TAG, "onResume mode is AppCompatDelegate.MODE_NIGHT_AUTO");
+//        }
     }
 
     @Override
@@ -148,11 +148,6 @@ public class StoryContentFragment extends Fragment implements BaseFragment, Base
         } else {
             FragmentUtils.popBackStack(getFragmentManager());
         }
-    }
-
-    @Override
-    public void fillData() {
-
     }
 
     private class CustomWebViewClient extends WebViewClient {

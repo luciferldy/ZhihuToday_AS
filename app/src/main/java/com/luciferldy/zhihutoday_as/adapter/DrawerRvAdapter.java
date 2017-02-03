@@ -1,12 +1,12 @@
 package com.luciferldy.zhihutoday_as.adapter;
 
 import android.support.annotation.IntDef;
-import android.support.v4.view.animation.LinearOutSlowInInterpolator;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -32,6 +32,9 @@ public class DrawerRvAdapter extends RecyclerView.Adapter<DrawerRvAdapter.Drawer
     public @interface RvItemCategory {}
 
     private ArrayList<ItemCategory> mRvItems = new ArrayList<>();
+    private OnClickListener mOnClickListener;
+
+    private View mSelectedRoot;
 
     @Override
     public int getItemViewType(int position) {
@@ -47,6 +50,8 @@ public class DrawerRvAdapter extends RecyclerView.Adapter<DrawerRvAdapter.Drawer
             viewHolder = new UserInfoViewHolder(view);
         } else if (viewType == TAG_MAIN) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.drawer_item_main, parent, false);
+            mSelectedRoot = view;
+            mSelectedRoot.setBackgroundResource(R.color.drawerItemNormal);
             viewHolder = new MainViewHolder(view);
         } else {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.drawer_item_others, parent, false);
@@ -72,16 +77,21 @@ public class DrawerRvAdapter extends RecyclerView.Adapter<DrawerRvAdapter.Drawer
         mRvItems.add(userInfo);
         ItemCategory main = new ItemCategory();
         main.category = TAG_MAIN;
+        main.name = "首页";
         mRvItems.add(main);
         for (ThemeListGson.OthersBean bean : beans) {
             ItemCategory themeItem = new ItemCategory();
             themeItem.category = TAG_OTHERS;
-            themeItem.text = bean.getName();
+            themeItem.name = bean.getName();
             themeItem.id = bean.getId();
             mRvItems.add(themeItem);
-            Logger.i(LOG_TAG, "drawer category item " + themeItem.text);
+            Logger.i(LOG_TAG, "drawer category item " + themeItem.name);
         }
         notifyDataSetChanged();
+    }
+
+    public void setOnClickListener(@NonNull OnClickListener listener) {
+        this.mOnClickListener = listener;
     }
 
     class UserInfoViewHolder extends DrawerRvViewHolder {
@@ -100,38 +110,64 @@ public class DrawerRvAdapter extends RecyclerView.Adapter<DrawerRvAdapter.Drawer
         }
 
         @Override
-        void onBind(ItemCategory category) {
+        void onBind(final ItemCategory category) {
             super.onBind(category);
             this.root.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
+                    if (mOnClickListener != null)
+                        mOnClickListener.onClick(TAG_MAIN, category.id, category.name);
+                    /**
+                     * 修改 item 选中状态的另一种做法是在 onBind 回调函数中根据 mSelection 的数值对 viwholder 的 contentView 着色
+                     * 当某个 item 选中时，notifiDatasetChanged
+                     */
+                    if (root != mSelectedRoot) {
+                        mSelectedRoot.setBackgroundResource(R.color.drawerItemNormal);
+                        root.setBackgroundResource(R.color.drawerItemSelected);
+                        mSelectedRoot = root;
+                    }
                 }
             });
+        }
+
+        @Override
+        void onSelected() {
+            this.root.setBackgroundResource(R.color.drawerItemSelected);
+        }
+
+        @Override
+        void unSelected() {
+            this.root.setBackgroundResource(R.color.drawerItemNormal);
         }
     }
 
     class OthersViewHolder extends DrawerRvViewHolder {
         View root;
-        TextView text;
+        TextView title;
         ImageView iv;
         public OthersViewHolder(View itemView) {
             super(itemView);
             root = itemView;
-            text = (TextView) root.findViewById(R.id.title);
+            title = (TextView) root.findViewById(R.id.title);
             iv = (ImageView) root.findViewById(R.id.ic_follow);
         }
 
         @Override
-        void onBind(ItemCategory category) {
+        void onBind(final ItemCategory category) {
             super.onBind(category);
             root.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
+                    if (mOnClickListener != null)
+                        mOnClickListener.onClick(TAG_OTHERS, category.id, category.name);
+                    if (root != mSelectedRoot) {
+                        mSelectedRoot.setBackgroundResource(R.color.drawerItemNormal);
+                        root.setBackgroundResource(R.color.drawerItemSelected);
+                        mSelectedRoot = root;
+                    }
                 }
             });
-            text.setText(category.text);
+            title.setText(category.name);
             iv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -143,7 +179,18 @@ public class DrawerRvAdapter extends RecyclerView.Adapter<DrawerRvAdapter.Drawer
             });
 
         }
+
+        @Override
+        void onSelected() {
+            this.root.setBackgroundResource(R.color.drawerItemSelected);
+        }
+
+        @Override
+        void unSelected() {
+            this.root.setBackgroundResource(R.color.drawerItemNormal);
+        }
     }
+
 
     class DrawerRvViewHolder extends RecyclerView.ViewHolder {
         public DrawerRvViewHolder(View itemView) {
@@ -152,12 +199,19 @@ public class DrawerRvAdapter extends RecyclerView.Adapter<DrawerRvAdapter.Drawer
 
         void onBind(ItemCategory category){}
 
+        void onSelected() {}
+
+        void unSelected() {}
     }
 
-    public class ItemCategory {
+    class ItemCategory {
 
         public int id;
         public @RvItemCategory int category;
-        public String text;
+        public String name;
+    }
+
+    public interface OnClickListener {
+        void onClick(@RvItemCategory int type, int themeId, String title);
     }
 }

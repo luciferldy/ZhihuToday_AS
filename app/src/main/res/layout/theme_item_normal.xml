@@ -9,7 +9,7 @@
     android:layout_marginRight="8dip"
     android:layout_marginTop="8dip"
     app:cardElevation="1dip">
-    
+
     <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
@@ -21,7 +21,7 @@
         android:textColor="@color/md_black"
         android:textColorHint="@color/md_black"
         android:hint="忙忙碌碌，爱管闲事，这和想想中的日本人不太一样"/>
-    
+
     <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/image"
         android:layout_width="73dip"

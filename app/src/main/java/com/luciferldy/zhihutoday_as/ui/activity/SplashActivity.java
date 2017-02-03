@@ -26,6 +26,7 @@ import com.facebook.common.logging.FLog;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.controller.BaseControllerListener;
 import com.facebook.drawee.controller.ControllerListener;
+import com.facebook.drawee.generic.GenericDraweeHierarchy;
 import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.imagepipeline.image.ImageInfo;
@@ -163,8 +164,10 @@ public class SplashActivity extends AppCompatActivity {
                         try {
                             String body = responseBody.string();
                             JSONObject object = new JSONObject(body);
-                            String text = object.getString("text");
-                            tv.setText(text);
+                            if (object.has("name")) {
+                                String text = object.getString("name");
+                                tv.setText(text);
+                            }
                             String url = object.getString("img");
                             Logger.i(LOG_TAG, "start image url=" + url);
                             DraweeController controller = Fresco.newDraweeControllerBuilder()
@@ -240,7 +243,9 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void loadDefaultStartImage(SimpleDraweeView iv, Animation animation) {
-        iv.setImageDrawable(getResources().getDrawable(R.drawable.start));
+        GenericDraweeHierarchy hierarchy = iv.getHierarchy();
+        hierarchy.setPlaceholderImage(R.drawable.start);
+//        iv.setImageDrawable(getResources().getDrawable(R.drawable.start));
 //        iv.startAnimation(animation);
     }
 

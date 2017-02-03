@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="18dip"
+            android:layout_marginBottom="10dip"
+            android:maxLines="1"
+            android:textColor="@color/md_black"
+            android:text="江南"/>
+
+        <TextView
+            android:id="@+id/bio"
+            android:layout_width="wrap_content"
+            android:layout_height="15dip"
+            android:maxLines="1"
+            android:textColor="@color/md_grey_300"
+            android:text="铁甲依然在"/>
+    </LinearLayout>
+
+</LinearLayout>

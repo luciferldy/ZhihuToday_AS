@@ -5,7 +5,5 @@ package com.luciferldy.zhihutoday_as.ui.fragment;
  * Fragment 的基础类
  */
 public interface BaseFragment {
-    void initPresenter();
     void onBackPressed();
-    void fillData();
 }
