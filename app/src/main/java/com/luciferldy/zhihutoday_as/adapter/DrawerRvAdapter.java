@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -34,7 +33,8 @@ public class DrawerRvAdapter extends RecyclerView.Adapter<DrawerRvAdapter.Drawer
     private ArrayList<ItemCategory> mRvItems = new ArrayList<>();
     private OnClickListener mOnClickListener;
 
-    private View mSelectedRoot;
+//    private View mSelectedRoot;
+    private int mSelectedPosition = 1;
 
     @Override
     public int getItemViewType(int position) {
@@ -50,8 +50,6 @@ public class DrawerRvAdapter extends RecyclerView.Adapter<DrawerRvAdapter.Drawer
             viewHolder = new UserInfoViewHolder(view);
         } else if (viewType == TAG_MAIN) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.drawer_item_main, parent, false);
-            mSelectedRoot = view;
-            mSelectedRoot.setBackgroundResource(R.color.drawerItemNormal);
             viewHolder = new MainViewHolder(view);
         } else {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.drawer_item_others, parent, false);
@@ -62,7 +60,9 @@ public class DrawerRvAdapter extends RecyclerView.Adapter<DrawerRvAdapter.Drawer
 
     @Override
     public void onBindViewHolder(DrawerRvViewHolder holder, int position) {
-        holder.onBind(mRvItems.get(position));
+        Logger.i(LOG_TAG, "onBindViewHolder position = " + position + ", mSelectedPosition = " + mSelectedPosition);
+        holder.onBind(mRvItems.get(position), position);
+        holder.onSelected(mSelectedPosition == position);
     }
 
     @Override
@@ -110,8 +110,8 @@ public class DrawerRvAdapter extends RecyclerView.Adapter<DrawerRvAdapter.Drawer
         }
 
         @Override
-        void onBind(final ItemCategory category) {
-            super.onBind(category);
+        void onBind(final ItemCategory category, final int position) {
+            super.onBind(category, position);
             this.root.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -121,23 +121,28 @@ public class DrawerRvAdapter extends RecyclerView.Adapter<DrawerRvAdapter.Drawer
                      * 修改 item 选中状态的另一种做法是在 onBind 回调函数中根据 mSelection 的数值对 viwholder 的 contentView 着色
                      * 当某个 item 选中时，notifiDatasetChanged
                      */
-                    if (root != mSelectedRoot) {
-                        mSelectedRoot.setBackgroundResource(R.color.drawerItemNormal);
-                        root.setBackgroundResource(R.color.drawerItemSelected);
-                        mSelectedRoot = root;
-                    }
+//                    if (root != mSelectedRoot) {
+//                        mSelectedRoot.setBackgroundResource(R.color.drawerItemNormal);
+//                        root.setBackgroundResource(R.color.drawerItemSelected);
+//                        mSelectedRoot = root;
+//                    }
+                    // more clear than solution on StackOverFlow
+                    // http://stackoverflow.com/questions/27194044/how-to-properly-highlight-selected-item-on-recyclerview
+                    int previous = mSelectedPosition;
+                    mSelectedPosition = position;
+                    notifyItemChanged(previous);
+                    notifyItemChanged(mSelectedPosition);
                 }
             });
         }
 
         @Override
-        void onSelected() {
-            this.root.setBackgroundResource(R.color.drawerItemSelected);
-        }
-
-        @Override
-        void unSelected() {
-            this.root.setBackgroundResource(R.color.drawerItemNormal);
+        void onSelected(boolean isSelected) {
+            if (isSelected) {
+                root.setBackgroundResource(R.color.drawerItemSelected);
+            } else {
+                root.setBackgroundResource(R.color.drawerItemNormal);
+            }
         }
     }
 
@@ -153,18 +158,21 @@ public class DrawerRvAdapter extends RecyclerView.Adapter<DrawerRvAdapter.Drawer
         }
 
         @Override
-        void onBind(final ItemCategory category) {
-            super.onBind(category);
+        void onBind(final ItemCategory category, final int position) {
+            super.onBind(category, position);
             root.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (mOnClickListener != null)
                         mOnClickListener.onClick(TAG_OTHERS, category.id, category.name);
-                    if (root != mSelectedRoot) {
-                        mSelectedRoot.setBackgroundResource(R.color.drawerItemNormal);
-                        root.setBackgroundResource(R.color.drawerItemSelected);
-                        mSelectedRoot = root;
-                    }
+//                    if (root != mSelectedRoot) {
+//                        mSelectedRoot.setBackgroundResource(R.color.drawerItemNormal);
+//                        root.setBackgroundResource(R.color.drawerItemSelected);
+//                        mSelectedRoot = root;
+//                    }
+                    notifyItemChanged(mSelectedPosition);
+                    mSelectedPosition = position;
+                    notifyItemChanged(mSelectedPosition);
                 }
             });
             title.setText(category.name);
@@ -181,13 +189,12 @@ public class DrawerRvAdapter extends RecyclerView.Adapter<DrawerRvAdapter.Drawer
         }
 
         @Override
-        void onSelected() {
-            this.root.setBackgroundResource(R.color.drawerItemSelected);
-        }
-
-        @Override
-        void unSelected() {
-            this.root.setBackgroundResource(R.color.drawerItemNormal);
+        void onSelected(boolean isSelected) {
+            if (isSelected) {
+                root.setBackgroundResource(R.color.drawerItemSelected);
+            } else {
+                root.setBackgroundResource(R.color.drawerItemNormal);
+            }
         }
     }
 
@@ -197,11 +204,9 @@ public class DrawerRvAdapter extends RecyclerView.Adapter<DrawerRvAdapter.Drawer
             super(itemView);
         }
 
-        void onBind(ItemCategory category){}
+        void onBind(ItemCategory category, int position){}
 
-        void onSelected() {}
-
-        void unSelected() {}
+        void onSelected(boolean isSelected) {}
     }
 
     class ItemCategory {

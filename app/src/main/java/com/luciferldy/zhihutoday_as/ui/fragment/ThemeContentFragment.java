@@ -3,6 +3,7 @@ package com.luciferldy.zhihutoday_as.ui.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.animation.LinearOutSlowInInterpolator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,10 +16,12 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.luciferldy.zhihutoday_as.R;
 import com.luciferldy.zhihutoday_as.adapter.ThemeContentRvAdapter;
 import com.luciferldy.zhihutoday_as.model.ThemeContentListGson;
+import com.luciferldy.zhihutoday_as.presenter.MainPresenter;
 import com.luciferldy.zhihutoday_as.presenter.ThemeContentFragPresenter;
 import com.luciferldy.zhihutoday_as.ui.view.BaseView;
 import com.luciferldy.zhihutoday_as.utils.CommonUtils;
 import com.luciferldy.zhihutoday_as.utils.FragmentUtils;
+import com.luciferldy.zhihutoday_as.utils.Logger;
 
 import java.util.List;
 
@@ -41,7 +44,7 @@ public class ThemeContentFragment extends Fragment implements BaseView, BaseFrag
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_theme_content, container, false);
         mBackground = (SimpleDraweeView) root.findViewById(R.id.theme_img);
         mDescription = (TextView) root.findViewById(R.id.theme_des);
@@ -52,12 +55,18 @@ public class ThemeContentFragment extends Fragment implements BaseView, BaseFrag
         mAdapter.addCallback(new ThemeContentRvAdapter.Callback() {
             @Override
             public void onClickNormal(int contentId) {
-
+                Logger.i(LOG_TAG, "onClickNormal contentId = " + contentId);
+                Bundle bundle = new Bundle();
+                bundle.putString(NewsDetailFragment.BUNDLE_URL, MainPresenter.URL_DAILY_STORY + contentId);
+                NewsDetailFragment fragment = new NewsDetailFragment();
+                FragmentUtils.addFragment(fragment, getFragmentManager(), bundle, true);
             }
 
             @Override
             public void onClickEditor(List<ThemeContentListGson.EditorsBean> editors) {
-
+                EditorsDetailFragment fragment = new EditorsDetailFragment();
+                fragment.setEditors(editors);
+                FragmentUtils.addFragment(fragment, getFragmentManager(), null, true);
             }
         });
         mRv.setAdapter(mAdapter);

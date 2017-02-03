@@ -141,9 +141,10 @@ public class ThemeContentRvAdapter extends RecyclerView.Adapter<ThemeContentRvAd
         @Override
         public void onBind(ThemeStoryWrapper story) {
             super.onBind(story);
+            root.removeViews(1, root.getChildCount() - 1);
             RecyclerView.LayoutParams rootParams = (RecyclerView.LayoutParams) root.getLayoutParams();
             int height = rootParams.height;
-            rootParams = null;
+//            rootParams = null;
             for (final ThemeContentListGson.EditorsBean editor: mEditors) {
                 SimpleDraweeView avatar = new SimpleDraweeView(root.getContext());
                 root.addView(avatar);

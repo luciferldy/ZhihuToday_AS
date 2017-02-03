@@ -1,7 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="70dip"
+    android:paddingLeft="16dip"
+    android:paddingRight="16dip"
+    android:orientation="horizontal"
+    android:gravity="center_vertical">
+    
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/avatar"
+        android:layout_width="40dip"
+        android:layout_height="40dip"
+        android:layout_marginRight="10dip"
+        android:layout_marginEnd="10dip"
+        fresco:actualImageScaleType="centerCrop"
+        fresco:placeholderImageScaleType="centerCrop"
+        fresco:placeholderImage="@drawable/comment_avatar"
+        fresco:roundAsCircle="true" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -23,7 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="15dip"
             android:maxLines="1"
-            android:textColor="@color/md_grey_300"
+            android:textColor="@color/md_grey_500"
             android:text="铁甲依然在"/>
     </LinearLayout>
 

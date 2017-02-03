@@ -15,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
@@ -203,6 +204,12 @@ public class MainActivity extends BaseActivity {
         });
         RecyclerView drawerRv = (RecyclerView) findViewById(R.id.drawer_rv);
         drawerRv.setLayoutManager(new LinearLayoutManager(getBaseContext()));
+        drawerRv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
         mDrawerRvAdapter = new DrawerRvAdapter();
         mDrawerRvAdapter.setOnClickListener(new DrawerRvAdapter.OnClickListener() {
             @Override
