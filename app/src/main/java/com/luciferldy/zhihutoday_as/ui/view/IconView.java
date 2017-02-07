@@ -51,6 +51,7 @@ public class IconView extends View {
             mMainPaint.setStrokeWidth(strokeWidth);
             int color = t.getColor(R.styleable.IconView_stroke_color, getResources().getColor(R.color.md_grey_300));
             mMainPaint.setColor(color);
+            mMainPaint.setStrokeCap(Paint.Cap.ROUND);
             radius = t.getDimension(R.styleable.IconView_radius, CommonUtils.dip2px(context, 14));
         } finally {
             t.recycle();
