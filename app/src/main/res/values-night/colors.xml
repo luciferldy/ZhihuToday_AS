@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimaryNight">#343434</color>
-    <color name="colorPrimaryDarkNight">#000000</color>
-    <color name="colorAccentNight">#656565</color>
+    <!--<color name="colorPrimaryNight">#343434</color>-->
+    <!--<color name="colorPrimaryDarkNight">#000000</color>-->
+    <!--<color name="colorAccentNight">#656565</color>-->
+    <color name="colorPrimary">#222222</color>
+    <color name="colorPrimaryDark">#000000</color>
+    <color name="colorAccent">#656565</color>
+    <color name="drawerUserInfoBackground">#252525</color>
+    <color name="drawerItemSelected">#2C2C2C</color>
+    <color name="drawerItemNormal">#343434</color>
+    <color name="mainRvBackground">#343434</color>
 </resources>

@@ -33,7 +33,7 @@ import com.facebook.imagepipeline.image.ImageInfo;
 import com.facebook.imagepipeline.image.QualityInfo;
 import com.luciferldy.zhihutoday_as.R;
 import com.luciferldy.zhihutoday_as.api.NewsApi;
-import com.luciferldy.zhihutoday_as.ui.view.IconView;
+import com.luciferldy.zhihutoday_as.ui.view.LogoView;
 import com.luciferldy.zhihutoday_as.utils.Logger;
 
 import org.json.JSONException;
@@ -80,26 +80,27 @@ public class SplashActivity extends AppCompatActivity {
         }
 
         final Animation animation = AnimationUtils.loadAnimation(getBaseContext(), R.anim.splash_start_iv);
-            animation.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
-                    Logger.i(LOG_TAG, "onAnimationStart");
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                Logger.i(LOG_TAG, "onAnimationStart");
 //                    iv.setVisibility(View.VISIBLE);
-                }
+            }
 
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    // 设置 SimpleDrawee 为 GONE 看不到动画回弹
-                    iv.setVisibility(View.GONE);
-                    Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                // 设置 SimpleDrawee 为 GONE 看不到动画回弹
+                iv.setVisibility(View.GONE);
+                Intent intent = new Intent(SplashActivity.this, MainActivity.class);
 //                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(SplashActivity.this);
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
-                        SplashActivity.this.startActivity(intent);
-                    else
-                        SplashActivity.this.startActivity(intent);
-                    SplashActivity.this.finish();
-                    SplashActivity.this.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    SplashActivity.this.startActivity(intent);
+                } else {
+                    SplashActivity.this.startActivity(intent);
                 }
+                SplashActivity.this.finish();
+                SplashActivity.this.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            }
 
             @Override
             public void onAnimationRepeat(Animation animation) {
@@ -157,6 +158,7 @@ public class SplashActivity extends AppCompatActivity {
                     @Override
                     public void onError(Throwable e) {
                         e.printStackTrace();
+                        loadDefaultStartImage(iv, animation);
                     }
 
                     @Override
@@ -197,7 +199,7 @@ public class SplashActivity extends AppCompatActivity {
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         RelativeLayout layout = (RelativeLayout) findViewById(R.id.icon_layout);
-        final IconView icon = (IconView) findViewById(R.id.icon_view);
+        final LogoView icon = (LogoView) findViewById(R.id.icon_view);
         // 使用 layout.getHeight 获取的值不等与 layout 的高度
         FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) layout.getLayoutParams();
         // 使用 layout_marginBottom 不会出现动画效果
@@ -213,7 +215,7 @@ public class SplashActivity extends AppCompatActivity {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                icon.startAnim(new IconView.AnimEndCallback() {
+                icon.startAnim(new LogoView.AnimEndCallback() {
                     @Override
                     public void end() {
                         intentToMainActivity();

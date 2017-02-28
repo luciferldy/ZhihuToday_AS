@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="110dip"
     android:paddingLeft="16dip"
-    android:background="@color/colorPrimary">
+    android:background="@color/drawerUserInfoBackground">
 
     <LinearLayout
         android:layout_width="match_parent"

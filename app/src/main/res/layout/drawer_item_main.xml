@@ -5,7 +5,7 @@
     android:layout_height="50dip"
     android:paddingLeft="16dip"
     android:gravity="center_vertical"
-    android:background="#f0f0f0">
+    android:background="@color/drawerItemSelected">
 
     <ImageView
         android:layout_width="31dip"

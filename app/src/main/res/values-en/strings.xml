@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">知乎日报·今日</string>
+    <string name="copy_url">copy link</string>
+    <string name="des_main">main</string>
+    <string name="mode_night_no">day mode</string>
+    <string name="mode_night_yes">night mode</string>
+    <string name="open_in_browser">open in browser</string>
+    <string name="share">share</string>
+    <string name="daily_news">daily news</string>
+</resources>

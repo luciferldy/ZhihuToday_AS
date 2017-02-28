@@ -44,7 +44,7 @@
         android:layout_gravity="bottom"
         android:background="@android:color/black">
 
-        <com.luciferldy.zhihutoday_as.ui.view.IconView
+        <com.luciferldy.zhihutoday_as.ui.view.LogoView
             android:id="@+id/icon_view"
             android:layout_width="44dip"
             android:layout_height="44dip"

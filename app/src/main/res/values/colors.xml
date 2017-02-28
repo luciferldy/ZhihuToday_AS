@@ -2,7 +2,9 @@
 <resources>
     <color name="colorPrimary">#00A2ED</color>
     <color name="colorPrimaryDark">#1976D2</color>
-    <color name="colorAccent">#ff4081</color>
-    <color name="drawerItemSelected">#f0f0f0</color>
-    <color name="drawerItemNormal">#ffffff</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="drawerUserInfoBackground">#00A2ED</color>
+    <color name="drawerItemSelected">#F0F0F0</color>
+    <color name="drawerItemNormal">#FFFFFF</color>
+    <color name="mainRvBackground">#F3F3F3</color>
 </resources>

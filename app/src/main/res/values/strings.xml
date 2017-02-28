@@ -6,10 +6,12 @@
     <string name="mode_night_no">日间模式</string>
     <string name="mode_night_yes">夜间模式</string>
 
-    <string name="splash_text">"@luciferldy"</string>
+    <string name="splash_text" translatable="false">"@luciferldy"</string>
     <string name="des_main">首页</string>
     <string name="daily_news">今日热闻</string>
 
-    <string name="drawer_open">drawer open</string>
-    <string name="drawer_close">drawer close</string>
+    <string name="drawer_open" translatable="false">drawer open</string>
+    <string name="drawer_close" translatable="false">drawer close</string>
+
+    <string name="daily_logo_path" translatable="false">M14.7447,26.5111 C8.25827,26.5111,3,21.248,3,14.7556 C3,8.26314,8.25827,3,14.7447,3 C21.2311,3,26.4894,8.26314,26.4894,14.7556 C</string>
 </resources>

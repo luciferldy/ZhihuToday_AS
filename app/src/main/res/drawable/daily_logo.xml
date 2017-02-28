@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/daily_logo_vector">
+    <target
+        android:animation="@animator/animator_daily_logo"
+        android:name="circle" />
+</animated-vector>

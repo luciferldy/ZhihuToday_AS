@@ -10,11 +10,44 @@ android {
         targetSdkVersion 24
         versionCode 1
         versionName "1.0"
+        vectorDrawables.useSupportLibrary = true
     }
+
+    productFlavors {
+        pay {
+            versionName '1.0.0'
+        }
+        free {
+            versionName '1.0.0'
+        }
+    }
+
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            debuggable false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            minifyEnabled false
+            debuggable true
+        }
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
+    android.applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            def file = output.outputFile
+            output.outputFile = new File(
+                    (String) file.parent,
+                    (String) file.name.replace(
+                            file.name,
+                            "ZhihuToday_" + variant.name + "_" + variant.versionName + ".apk"
+                    )
+            )
         }
     }
 }

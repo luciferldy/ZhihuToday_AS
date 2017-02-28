@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:height="29.0dip"
+    android:width="29.0dip"
+    android:viewportWidth="29.0"
+    android:viewportHeight="29.0">
+    <group>
+        <path android:name="circle" android:pathData="@string/daily_logo_path" android:strokeColor="#ffc2c5cc"
+            android:strokeWidth="4.5" android:strokeLineCap="round" />
+    </group>
+
+</vector>

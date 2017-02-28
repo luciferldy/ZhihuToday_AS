@@ -262,10 +262,15 @@ public class MainActivity extends BaseActivity {
             Logger.i(LOG_TAG, "mCurFragment is null.");
             return;
         }
+        Logger.i(LOG_TAG, "switchFragment currentFragment is " + mCurFragment.getClass().getSimpleName());
         if (toFragment == null) {
             Logger.i(LOG_TAG, "toFragment is null");
             return;
         }
+//        if (toFragment == mCurFragment && mCurFragment.isAdded()) {
+//            Logger.i(LOG_TAG, "toFragment == mCurFragment");
+//            return;
+//        }
         if (toFragment.isAdded()) {
             getSupportFragmentManager().beginTransaction()
                     .hide(mCurFragment)
@@ -278,7 +283,7 @@ public class MainActivity extends BaseActivity {
                     .show(toFragment)
                     .commit();
         }
-        mCurFragment = toFragment; // TODO 是否回导致问题
+        mCurFragment = toFragment; // TODO 是否会导致问题
     }
 
     public void updateThemes(List<ThemeListGson.OthersBean> beans) {

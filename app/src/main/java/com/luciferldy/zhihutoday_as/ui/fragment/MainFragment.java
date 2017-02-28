@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -48,7 +49,6 @@ public class MainFragment extends Fragment implements BaseFragment, BaseSwipeRef
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_main, container, false);
-
 
 //        mVStatusBar = root.findViewById(R.id.virtual_status_bar);
 //        mToolbar = (Toolbar) root.findViewById(R.id.toolbar);

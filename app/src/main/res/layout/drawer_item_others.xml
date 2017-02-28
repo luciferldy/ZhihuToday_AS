@@ -4,7 +4,7 @@
     android:layout_height="50dip"
     android:paddingLeft="16dip"
     android:paddingRight="53.33dip"
-    android:background="@color/md_white">
+    android:background="@color/drawerItemNormal">
 
     <TextView
         android:id="@+id/title"

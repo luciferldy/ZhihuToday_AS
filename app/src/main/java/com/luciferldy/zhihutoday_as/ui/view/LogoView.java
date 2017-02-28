@@ -9,9 +9,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PathMeasure;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
 import android.view.View;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 
 import com.luciferldy.zhihutoday_as.R;
@@ -23,9 +21,9 @@ import com.luciferldy.zhihutoday_as.utils.Logger;
  * 启动页知乎的3/4圆的图标
  */
 
-public class IconView extends View {
+public class LogoView extends View {
 
-    private static final String LOG_TAG = IconView.class.getSimpleName();
+    private static final String LOG_TAG = LogoView.class.getSimpleName();
 
     private int width;
     private int height;
@@ -39,20 +37,20 @@ public class IconView extends View {
 
 
 
-    public IconView(Context context, AttributeSet attrs) {
+    public LogoView(Context context, AttributeSet attrs) {
         super(context, attrs);
         mMainPaint = new Paint();
         mMainPaint.setStyle(Paint.Style.STROKE);
         mMainPaint.setAntiAlias(true); // 抗锯齿
 
-        TypedArray t = context.getTheme().obtainStyledAttributes(attrs, R.styleable.IconView, 0, 0);
+        TypedArray t = context.getTheme().obtainStyledAttributes(attrs, R.styleable.LogoView, 0, 0);
         try {
-            float strokeWidth = t.getDimension(R.styleable.IconView_stroke_width, CommonUtils.dip2px(context, 5));
+            float strokeWidth = t.getDimension(R.styleable.LogoView_stroke_width, CommonUtils.dip2px(context, 5));
             mMainPaint.setStrokeWidth(strokeWidth);
-            int color = t.getColor(R.styleable.IconView_stroke_color, getResources().getColor(R.color.md_grey_300));
+            int color = t.getColor(R.styleable.LogoView_stroke_color, getResources().getColor(R.color.md_grey_300));
             mMainPaint.setColor(color);
             mMainPaint.setStrokeCap(Paint.Cap.ROUND);
-            radius = t.getDimension(R.styleable.IconView_radius, CommonUtils.dip2px(context, 14));
+            radius = t.getDimension(R.styleable.LogoView_radius, CommonUtils.dip2px(context, 14));
         } finally {
             t.recycle();
         }
