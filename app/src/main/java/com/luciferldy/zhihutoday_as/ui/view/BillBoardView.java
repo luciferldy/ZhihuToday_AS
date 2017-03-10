@@ -159,6 +159,7 @@ public class BillBoardView extends FrameLayout {
         viewPager.setCurrentItem(0);
     }
 
+    @Deprecated
     private void initDotsAndCursorLayout() {
 
         int parentWidth = this.getMeasuredWidth();

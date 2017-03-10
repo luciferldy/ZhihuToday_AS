@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Created by Lucifer on 2016/9/2.
  */
-public class BillBoardViewAdapter extends PagerAdapter{
+public class BillBoardViewAdapter extends PagerAdapter {
 
     private static final String LOG_TAG = BillBoardViewAdapter.class.getSimpleName();
 
