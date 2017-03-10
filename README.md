@@ -8,15 +8,25 @@
 
 ### 简介
 
-![PP](art/intro.gif)
+像素级高仿知乎日报，可以查看正常日报内容和主题日报内容，支持文章分享和浏览器查看。
 
-首页使用 Activity ，日报的详情页使用 Fragment 的 WebView 展示。每个界面独立的 ToolBar ，适配4.4的半透明状态栏和5.0的透明状态栏。
+![introduction](art/intro.gif)
 
-项目使用 MVP 的架构模式，使用 Retrofit + RxJava 获取日报数据。
+使用 Activity 作为容器，首页内容和主题日报等均使用 Fragment，日报的详情页使用 Fragment + WebView 展示。
 
-逻辑操作均放在 Presenter 中执行， Activity 和 Fragment 只是单纯的展示界面。
+项目使用 MVP 的架构模式，使用 Retrofit + RxJava 获取日报数据。逻辑操作均放在 Presenter 中执行， Activity 和 Fragment 只是展示模块。所有图片展示使用 [Fresco](http://fresco-cn.org/) 。
 
-所有图片展示使用 [Fresco](http://fresco-cn.org/) 。
+自定义启动界面 LogoView ，ViewPagerIndicator ，ViewPagerIndicator 有良好的滑动效果。
+
+适配 Android 4.0 及 5.0 以上的沉浸式状态栏，可以系统 fitSystemWindows 属性，也可以使用项目中自定义的 VirtualStatusBar 。
+
+支持夜间模式切换，代码中对夜间模式切换的多种实现方案进行了注释，也可以参考 [Android 夜间模式切换](http://liandongyang.coding.me/post/android-support-night-mode/) 这篇文章。
+
+![main-page](art/main-page.png)   ![theme-list](art/theme-list.png)
+
+![night-mode](art/night-mode.png)  ![detail](art/detail.png)
+
+
 
 
 ### 依赖库
@@ -28,9 +38,9 @@
 
 ### 参考
 
-* [DecentBanner](https://github.com/chengdazhi/DecentBanner) 参考了其中 indicator 的实现方式，应用到 dot 中。
+* [DecentBanner](https://github.com/chengdazhi/DecentBanner) 参考了其中 indicator 的实现方式，应用到 indicator 中。
 * [ZhihuDailyPurify](https://github.com/izzyleung/ZhihuDailyPurify/) 数据来源与 ZhihuDailyPurify 对知乎日报 API 的分析。
-* [EasyRecycleAdapterHelper](https://github.com/HotBitmapGG/EasyRecycleAdapterHelper) 加载 RecycleView item 时的动画效果。
+* ~~[EasyRecycleAdapterHelper](https://github.com/HotBitmapGG/EasyRecycleAdapterHelper) 加载 RecycleView item 时的动画效果~~弃用这个效果因为会导致 CardView 的 cardElevation 属性消失。
 * More 还有很多优秀的 Retrofit ，RxJava 的文章。
 
 ### License
