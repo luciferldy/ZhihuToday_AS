@@ -48,6 +48,29 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         Logger.i(LOG_TAG, "onCreate");
 
+
+
+        if (savedInstanceState != null) {
+            Logger.d(LOG_TAG, "savedInstanceState is not null.");
+            mMainFragment = (MainFragment) getSupportFragmentManager().findFragmentByTag(MainFragment.class.getSimpleName());
+            mThemeContentFragment = (ThemeContentFragment) getSupportFragmentManager().findFragmentByTag(ThemeContentFragment.class.getSimpleName());
+            Logger.i(LOG_TAG, "mMainFragment is null ? " + (mMainFragment == null));
+            Logger.i(LOG_TAG, "fragmentList is null ? " + (getSupportFragmentManager().getFragments() == null));
+            // NullPointerException
+//            if (mMainFragment == null) {
+//                List<Fragment> fragmentList = getSupportFragmentManager().getFragments();
+//                for (Fragment fragment : fragmentList) {
+//                    if (fragment instanceof MainFragment) {
+//                        Logger.i(LOG_TAG, "get mainFragment from list");
+//                        mMainFragment = (MainFragment) fragment;
+//                    }
+//                    if (fragment instanceof ThemeContentFragment) {
+//                        mThemeContentFragment = (ThemeContentFragment) fragment;
+//                    }
+//                }
+//            }
+        }
+
         setContentView(R.layout.activity_main);
         initPresenter();
         initView();
@@ -110,7 +133,9 @@ public class MainActivity extends BaseActivity {
         initToolbar();
         initDrawer();
 
-        mMainFragment = new MainFragment();
+        if (mMainFragment == null) {
+            mMainFragment = new MainFragment();
+        }
         mMainFragment.setScrollCallback(new MainFragment.ScrollCallback() {
             @Override
             public void onTitleChanged(String title) {
@@ -164,6 +189,12 @@ public class MainActivity extends BaseActivity {
                             getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                             recreate();
                         }
+                        return true;
+                    case R.id.action_add:
+//                        Logger.i(LOG_TAG, "action add, but hide main fragment.");
+//                        getSupportFragmentManager().beginTransaction()
+//                                .hide(mMainFragment)
+//                                .commit();
                         return true;
                     default:
                         Logger.i(LOG_TAG, "onMenuItemClick default.");
@@ -262,11 +293,13 @@ public class MainActivity extends BaseActivity {
             Logger.i(LOG_TAG, "mCurFragment is null.");
             return;
         }
-        Logger.i(LOG_TAG, "switchFragment currentFragment is " + mCurFragment.getClass().getSimpleName());
         if (toFragment == null) {
             Logger.i(LOG_TAG, "toFragment is null");
             return;
         }
+        Logger.d(LOG_TAG, "switchFragment currentFragment is " + mCurFragment.getClass().getSimpleName() + ", toFragment is " + toFragment.getClass().getSimpleName());
+        Logger.d(LOG_TAG, "currentFragment is toFragment ? " + (mCurFragment == toFragment));
+        Logger.i(LOG_TAG, "toFragment isAdded ? " + toFragment.isAdded() + ", tag is " + toFragment.getTag());
 //        if (toFragment == mCurFragment && mCurFragment.isAdded()) {
 //            Logger.i(LOG_TAG, "toFragment == mCurFragment");
 //            return;
@@ -279,7 +312,7 @@ public class MainActivity extends BaseActivity {
         } else {
             getSupportFragmentManager().beginTransaction()
                     .hide(mCurFragment)
-                    .add(R.id.container, toFragment)
+                    .add(R.id.container, toFragment, toFragment.getClass().getSimpleName())
                     .show(toFragment)
                     .commit();
         }

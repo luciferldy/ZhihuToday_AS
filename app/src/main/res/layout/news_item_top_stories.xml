@@ -16,7 +16,7 @@
         android:layout_gravity="bottom"
         android:layout_marginBottom="10dip"
         indicator:indicator_count="5"
-        indicator:indicator_distance="4dip"
+        indicator:indicator_distance="6dip"
         indicator:indicator_size="6dip"
         indicator:indicator_normal_color="@color/md_white"
         indicator:indicator_selected_color="@color/md_grey_700" />

@@ -83,7 +83,7 @@ public class IndicatorView extends View {
             canvas.drawCircle(pointF.x, pointF.y, dotRadius, mPaint);
         }
         mPaint.setColor(selectedColor);
-        canvas.drawCircle(cursorPointF.x, cursorPointF.y, dotRadius, mPaint);
+        canvas.drawCircle(cursorPointF.x, cursorPointF.y, dotRadius + 1, mPaint);
     }
 
     /**

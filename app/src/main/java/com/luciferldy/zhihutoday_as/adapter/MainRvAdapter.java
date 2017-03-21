@@ -195,6 +195,20 @@ public class MainRvAdapter extends RecyclerView.Adapter<MainRvAdapter.BaseViewHo
         public void bindItem(DataWrapper data){}
     }
 
+    static class B {
+
+    }
+
+    static class A extends B {
+
+    }
+
+    static class C extends B {
+
+    }
+
+
+
     /**
      * 热门新闻
      */
